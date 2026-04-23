@@ -327,15 +327,6 @@
                     affected: 'All 33 URLs are blog posts in post-sitemap.xml — quarterly perspectives, market perspectives, trademark updates, market thoughts, and market summaries from 2011 through 2026'
                 },
                 {
-                    id: 'meta-descriptions',
-                    priority: 'high',
-                    title: 'Write meta descriptions for all 64 pages',
-                    impact: '64 pages (100%)',
-                    description: 'Zero pages on the site have meta descriptions. Google is auto-generating all search snippets, which likely doesn\'t align with Trademark\'s professional TPAM positioning.',
-                    fix: '<ul><li><strong>Core pages first:</strong></li><li>Homepage: focus on TPAM value prop for advisors (150-160 chars)</li><li>Services overview + 3 service pages: unique description per service</li><li>About Us, Team, Contact, Schedule a Consultation</li><li>For Clients, For Professionals, Who We Serve</li><li>Location/Minnesota</li><li><strong>Blog posts:</strong></li><li>Start with newest posts (2025-2026) — they get the most traffic</li><li>For older posts (2011 era), use a template: "Mark Carlton, CFA shares [topic] in this [quarterly/market] perspective from Trademark Financial Management."</li><li><strong>Pagination pages:</strong> Use template: "Page [N] of market insights and perspectives from Trademark Financial Management."</li><li><strong>Where to edit:</strong> In WordPress, use the SEO plugin\'s meta description field on each page/post edit screen</li></ul>',
-                    affected: 'Every single page on the site including: homepage, all service pages, about, team, contact, disclaimer, privacy policy, disaster recovery, FAQ, for-clients, for-professionals, who-we-serve, location/minnesota, schedule-a-consultation, blog index, all blog pagination, and all individual blog posts'
-                },
-                {
                     id: 'november-redirect',
                     priority: 'high',
                     title: 'Redirect /trademark-update-for-november-30-2025/',
@@ -487,6 +478,230 @@
                     description: '<code>/schedule-a-consultation/</code> has a form but no links back to services, resources, or any other page. Visitors who aren\'t ready to submit have nowhere to go but leave.',
                     fix: '<ul><li>Add contextual links below the consultation form</li><li>Link to: Services Overview, FAQ, Latest Insights</li><li>Gives visitors who aren\'t ready to submit somewhere to go instead of bouncing</li></ul>',
                     affected: '/schedule-a-consultation/'
+                }
+            ]
+        },
+        {
+            id: 'meta-tags',
+            title: 'Meta Titles & Descriptions',
+            badge: 'Phase 3',
+            subtitle: 'Source: SEO Master Sheet &bull; Enter these in the SEO plugin (Yoast/RankMath) on each page\'s edit screen',
+            fixes: [
+                {
+                    id: 'meta-home',
+                    priority: 'high',
+                    title: 'Home',
+                    impact: '/',
+                    description: 'No meta title or description set. Google is auto-generating the snippet.',
+                    fix: '<p><strong>Meta Title:</strong></p><div class="affected-pages">Third-Party Asset Management for Advisors</div><p style="margin-top:0.75rem"><strong>Meta Description:</strong></p><div class="affected-pages">Discover outsourced investment management, OCIO solutions, and model portfolios built to support modern financial advisors.</div><p style="margin-top:0.75rem"><strong>Where:</strong> WordPress &rarr; Edit Homepage &rarr; SEO plugin meta fields</p>',
+                    affected: 'trademarkfinancial.us/'
+                },
+                {
+                    id: 'meta-about',
+                    priority: 'high',
+                    title: 'About Us',
+                    impact: '/about',
+                    description: 'No meta title or description set.',
+                    fix: '<p><strong>Meta Title:</strong></p><div class="affected-pages">About Trademark Financial Management</div><p style="margin-top:0.75rem"><strong>Meta Description:</strong></p><div class="affected-pages">Learn who we are, how we serve advisors, and why our disciplined, fiduciary investment approach strengthens client portfolios.</div>',
+                    affected: 'trademarkfinancial.us/about'
+                },
+                {
+                    id: 'meta-team',
+                    priority: 'high',
+                    title: 'Team',
+                    impact: '/about/team',
+                    description: 'No meta title or description set.',
+                    fix: '<p><strong>Meta Title:</strong></p><div class="affected-pages">Meet the Trademark Financial Team</div><p style="margin-top:0.75rem"><strong>Meta Description:</strong></p><div class="affected-pages">Meet our experienced investment professionals delivering outsourced management, research, and advisor-focused portfolio expertise.</div>',
+                    affected: 'trademarkfinancial.us/about/team'
+                },
+                {
+                    id: 'meta-who-we-serve',
+                    priority: 'high',
+                    title: 'Who We Serve',
+                    impact: '/who-we-serve',
+                    description: 'No meta title or description set.',
+                    fix: '<p><strong>Meta Title:</strong></p><div class="affected-pages">Who We Serve at Trademark Financial</div><p style="margin-top:0.75rem"><strong>Meta Description:</strong></p><div class="affected-pages">See how we support advisors and organizations with outsourced investment management, strategic oversight, and portfolio solutions.</div>',
+                    affected: 'trademarkfinancial.us/who-we-serve'
+                },
+                {
+                    id: 'meta-for-professionals',
+                    priority: 'high',
+                    title: 'For Professionals',
+                    impact: '/who-we-serve/for-professionals',
+                    description: 'No meta title or description set.',
+                    fix: '<p><strong>Meta Title:</strong></p><div class="affected-pages">Solutions for Financial Advisors</div><p style="margin-top:0.75rem"><strong>Meta Description:</strong></p><div class="affected-pages">Explore outsourced investment management, model portfolios, and advisor-focused support designed to elevate your client offerings.</div>',
+                    affected: 'trademarkfinancial.us/who-we-serve/for-professionals'
+                },
+                {
+                    id: 'meta-for-clients',
+                    priority: 'high',
+                    title: 'For Clients',
+                    impact: '/who-we-serve/for-clients',
+                    description: 'No meta title or description set.',
+                    fix: '<p><strong>Meta Title:</strong></p><div class="affected-pages">Client Experience at Trademark Financial</div><p style="margin-top:0.75rem"><strong>Meta Description:</strong></p><div class="affected-pages">Learn how our transparent investment process, fiduciary guidance, and portfolio oversight help clients pursue long-term financial clarity.</div>',
+                    affected: 'trademarkfinancial.us/who-we-serve/for-clients'
+                },
+                {
+                    id: 'meta-services',
+                    priority: 'high',
+                    title: 'Services Overview',
+                    impact: '/services',
+                    description: 'No meta title or description set.',
+                    fix: '<p><strong>Meta Title:</strong></p><div class="affected-pages">Investment Services for Advisors</div><p style="margin-top:0.75rem"><strong>Meta Description:</strong></p><div class="affected-pages">Explore outsourced investment management, OCIO services, and advisor-focused portfolio solutions built to strengthen your practice.</div>',
+                    affected: 'trademarkfinancial.us/services'
+                },
+                {
+                    id: 'meta-tpam',
+                    priority: 'high',
+                    title: 'Third-Party Asset Management',
+                    impact: '/services/third-party-asset-management',
+                    description: 'No meta title or description set.',
+                    fix: '<p><strong>Meta Title:</strong></p><div class="affected-pages">Third-Party Asset Management</div><p style="margin-top:0.75rem"><strong>Meta Description:</strong></p><div class="affected-pages">Outsourced asset management for advisors seeking disciplined portfolios, research-driven oversight, and steady investment support.</div>',
+                    affected: 'trademarkfinancial.us/services/third-party-asset-management'
+                },
+                {
+                    id: 'meta-ocio',
+                    priority: 'high',
+                    title: 'OCIO Services',
+                    impact: '/services/ocio-services',
+                    description: 'No meta title or description set.',
+                    fix: '<p><strong>Meta Title:</strong></p><div class="affected-pages">Outsourced CIO Services</div><p style="margin-top:0.75rem"><strong>Meta Description:</strong></p><div class="affected-pages">Access OCIO-level investment oversight, strategy development, and fiduciary guidance tailored for advisors and organizations.</div>',
+                    affected: 'trademarkfinancial.us/services/ocio-services'
+                },
+                {
+                    id: 'meta-consulting',
+                    priority: 'high',
+                    title: 'Investment Consulting',
+                    impact: '/services/investment-consulting',
+                    description: 'No meta title or description set.',
+                    fix: '<p><strong>Meta Title:</strong></p><div class="affected-pages">Investment Consulting Services</div><p style="margin-top:0.75rem"><strong>Meta Description:</strong></p><div class="affected-pages">Gain institutional-quality consulting, portfolio reviews, strategy guidance, and investment oversight designed for advisors and nonprofits.</div>',
+                    affected: 'trademarkfinancial.us/services/investment-consulting'
+                },
+                {
+                    id: 'meta-insights',
+                    priority: 'high',
+                    title: 'Insights',
+                    impact: '/insights',
+                    description: 'No meta title or description set.',
+                    fix: '<p><strong>Meta Title:</strong></p><div class="affected-pages">Investment Insights &amp; Resources</div><p style="margin-top:0.75rem"><strong>Meta Description:</strong></p><div class="affected-pages">Explore articles and insights covering portfolio strategy, outsourced investment trends, and advisor-focused market perspectives.</div>',
+                    affected: 'trademarkfinancial.us/insights'
+                },
+                {
+                    id: 'meta-contact',
+                    priority: 'high',
+                    title: 'Contact',
+                    impact: '/contact',
+                    description: 'No meta title or description set.',
+                    fix: '<p><strong>Meta Title:</strong></p><div class="affected-pages">Contact Trademark Financial</div><p style="margin-top:0.75rem"><strong>Meta Description:</strong></p><div class="affected-pages">Connect with our investment team to discuss outsourcing solutions, portfolio support, and advisory partnership opportunities.</div>',
+                    affected: 'trademarkfinancial.us/contact'
+                },
+                {
+                    id: 'meta-consultation',
+                    priority: 'high',
+                    title: 'Schedule a Consultation',
+                    impact: '/consultation',
+                    description: 'No meta title or description set. Note: master sheet URL is /consultation but live site uses /schedule-a-consultation.',
+                    fix: '<p><strong>Meta Title:</strong></p><div class="affected-pages">Schedule a Consultation</div><p style="margin-top:0.75rem"><strong>Meta Description:</strong></p><div class="affected-pages">Schedule a consultation to discuss outsourced investment solutions tailored for advisors seeking strategic portfolio support.</div><p style="margin-top:0.75rem"><em>Note: Live URL is /schedule-a-consultation/ — verify which slug is canonical</em></p>',
+                    affected: 'trademarkfinancial.us/schedule-a-consultation'
+                },
+                {
+                    id: 'meta-faq',
+                    priority: 'high',
+                    title: 'FAQ',
+                    impact: '/faq',
+                    description: 'No meta title or description set.',
+                    fix: '<p><strong>Meta Title:</strong></p><div class="affected-pages">FAQ</div><p style="margin-top:0.75rem"><strong>Meta Description:</strong></p><div class="affected-pages">Find clear answers to common questions about outsourced investment management, model portfolios, OCIO services, and advisor support.</div>',
+                    affected: 'trademarkfinancial.us/faq'
+                },
+                {
+                    id: 'meta-minnesota',
+                    priority: 'high',
+                    title: 'Minnesota',
+                    impact: '/minnesota',
+                    description: 'No meta title or description set.',
+                    fix: '<p><strong>Meta Title:</strong></p><div class="affected-pages">Asset Management in Minnesota</div><p style="margin-top:0.75rem"><strong>Meta Description:</strong></p><div class="affected-pages">Access statewide outsourced investment management, OCIO services, and advisor-focused portfolio solutions across Minnesota.</div>',
+                    affected: 'trademarkfinancial.us/minnesota'
+                },
+                {
+                    id: 'meta-disclosures',
+                    priority: 'medium',
+                    title: 'Legal / Disclosures',
+                    impact: '/disclosures',
+                    description: 'No meta title or description set.',
+                    fix: '<p><strong>Meta Title:</strong></p><div class="affected-pages">Legal Disclosures</div><p style="margin-top:0.75rem"><strong>Meta Description:</strong></p><div class="affected-pages">Access important regulatory disclosures, compliance documents, and firm information supporting transparency at Trademark Financial.</div>',
+                    affected: 'trademarkfinancial.us/disclosures'
+                },
+                {
+                    id: 'meta-privacy',
+                    priority: 'medium',
+                    title: 'Privacy Policy',
+                    impact: '/privacy-policy',
+                    description: 'No meta title or description set.',
+                    fix: '<p><strong>Meta Title:</strong></p><div class="affected-pages">Privacy Policy</div><p style="margin-top:0.75rem"><strong>Meta Description:</strong></p><div class="affected-pages">Review how Trademark Financial protects personal information, maintains confidentiality, and ensures secure communication practices.</div>',
+                    affected: 'trademarkfinancial.us/privacy-policy'
+                },
+                {
+                    id: 'meta-form-adv',
+                    priority: 'medium',
+                    title: 'Form ADV & CRS',
+                    impact: '/form-adv',
+                    description: 'No meta title or description set.',
+                    fix: '<p><strong>Meta Title:</strong></p><div class="affected-pages">Form ADV &amp; CRS</div><p style="margin-top:0.75rem"><strong>Meta Description:</strong></p><div class="affected-pages">View our official Form ADV and CRS documents detailing our services, regulatory commitments, and client relationship information.</div>',
+                    affected: 'trademarkfinancial.us/form-adv'
+                },
+                {
+                    id: 'meta-disclaimer',
+                    priority: 'medium',
+                    title: 'General Disclaimer',
+                    impact: '/disclaimer',
+                    description: 'No meta title or description set.',
+                    fix: '<p><strong>Meta Title:</strong></p><div class="affected-pages">General Disclaimer</div><p style="margin-top:0.75rem"><strong>Meta Description:</strong></p><div class="affected-pages">Read important disclosure details covering investment communication, regulatory requirements, and informational limitations.</div>',
+                    affected: 'trademarkfinancial.us/disclaimer'
+                },
+                {
+                    id: 'meta-continuity',
+                    priority: 'medium',
+                    title: 'Business Continuity',
+                    impact: '/business-continuity',
+                    description: 'No meta title or description set.',
+                    fix: '<p><strong>Meta Title:</strong></p><div class="affected-pages">Business Continuity Plan</div><p style="margin-top:0.75rem"><strong>Meta Description:</strong></p><div class="affected-pages">Learn how we maintain operational continuity, protect client access, and support service reliability during unexpected disruptions.</div>',
+                    affected: 'trademarkfinancial.us/business-continuity'
+                },
+                {
+                    id: 'meta-client-portal',
+                    priority: 'medium',
+                    title: 'Client Portal',
+                    impact: '/client-portal',
+                    description: 'No meta title or description set.',
+                    fix: '<p><strong>Meta Title:</strong></p><div class="affected-pages">Client Portal</div><p style="margin-top:0.75rem"><strong>Meta Description:</strong></p><div class="affected-pages">Log in to securely access your portfolio information, investment documents, and client resources through our online portal.</div>',
+                    affected: 'trademarkfinancial.us/client-portal'
+                },
+                {
+                    id: 'meta-careers',
+                    priority: 'medium',
+                    title: 'Careers (not yet built)',
+                    impact: '/careers',
+                    description: 'Page is in design, heading to development. Set meta tags when the page goes live.',
+                    fix: '<p><strong>Meta Title:</strong></p><div class="affected-pages">Careers at Trademark Financial</div><p style="margin-top:0.75rem"><strong>Meta Description:</strong></p><div class="affected-pages">Explore careers with a growing investment firm committed to supporting advisors through research-driven, outsourced strategies.</div><p style="margin-top:0.75rem"><em>Set these when /careers/ goes live</em></p>',
+                    affected: 'trademarkfinancial.us/careers (not yet live)'
+                },
+                {
+                    id: 'meta-saint-paul',
+                    priority: 'medium',
+                    title: 'Saint Paul (not yet built)',
+                    impact: '/saint-paul',
+                    description: 'Location page in master sheet but not yet built.',
+                    fix: '<p><strong>Meta Title:</strong></p><div class="affected-pages">Asset Management in Saint Paul</div><p style="margin-top:0.75rem"><strong>Meta Description:</strong></p><div class="affected-pages">Explore outsourced investment, OCIO services, and advisor-focused portfolio solutions tailored for firms in Saint Paul, Minnesota.</div><p style="margin-top:0.75rem"><em>Set these when /saint-paul/ is built</em></p>',
+                    affected: 'trademarkfinancial.us/saint-paul (not yet live)'
+                },
+                {
+                    id: 'meta-minneapolis',
+                    priority: 'medium',
+                    title: 'Minneapolis (not yet built)',
+                    impact: '/minneapolis',
+                    description: 'Location page in master sheet but not yet built.',
+                    fix: '<p><strong>Meta Title:</strong></p><div class="affected-pages">Asset Management in Minneapolis</div><p style="margin-top:0.75rem"><strong>Meta Description:</strong></p><div class="affected-pages">Discover outsourced investment management and OCIO support built to serve financial advisors throughout Minneapolis and nearby areas.</div><p style="margin-top:0.75rem"><em>Set these when /minneapolis/ is built</em></p>',
+                    affected: 'trademarkfinancial.us/minneapolis (not yet live)'
                 }
             ]
         }
