@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trademark Financial — Internal Link Audit Tracker</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f8fafc;
+            color: #1e293b;
+            line-height: 1.6;
+            padding: 2rem 1rem;
+        }
+        .container { max-width: 900px; margin: 0 auto; }
+        .nav-bar {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            font-size: 0.85rem;
+        }
+        .nav-bar a {
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            text-decoration: none;
+            color: #64748b;
+            background: #f1f5f9;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        .nav-bar a:hover { background: #e2e8f0; color: #334155; }
+        .nav-bar a.active {
+            background: #0f172a;
+            color: white;
+        }
+        header {
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 2px solid #e2e8f0;
+        }
+        h1 { font-size: 1.75rem; font-weight: 700; color: #0f172a; }
+        .subtitle { color: #64748b; margin-top: 0.25rem; font-size: 0.9rem; }
+        .progress-bar {
+            margin-top: 1rem;
+            background: #e2e8f0;
+            border-radius: 999px;
+            height: 10px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #059669, #10b981);
+            border-radius: 999px;
+            transition: width 0.4s ease;
+        }
+        .progress-text {
+            margin-top: 0.5rem;
+            font-size: 0.85rem;
+            color: #64748b;
+            font-weight: 500;
+        }
+        .priority-section {
+            margin-bottom: 2rem;
+        }
+        .priority-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        .priority-badge {
+            padding: 0.2rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .priority-critical .priority-badge { background: #fef2f2; color: #dc2626; }
+        .priority-high .priority-badge { background: #fff7ed; color: #ea580c; }
+        .priority-medium .priority-badge { background: #fefce8; color: #ca8a04; }
+        .priority-header h2 { font-size: 1.1rem; font-weight: 600; }
+        .fix-card {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            margin-bottom: 0.75rem;
+            overflow: hidden;
+            transition: box-shadow 0.2s;
+        }
+        .fix-card:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+        .fix-card.completed { opacity: 0.7; }
+        .fix-card.completed .fix-title { text-decoration: line-through; color: #94a3b8; }
+        .fix-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem 1.25rem;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fix-checkbox {
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+            border: 2px solid #cbd5e1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .fix-checkbox.checked {
+            background: #059669;
+            border-color: #059669;
+        }
+        .fix-checkbox.checked::after {
+            content: '';
+            width: 6px;
+            height: 10px;
+            border: 2px solid white;
+            border-top: none;
+            border-left: none;
+            transform: rotate(45deg) translateY(-1px);
+        }
+        .fix-title { font-weight: 500; flex: 1; font-size: 0.95rem; }
+        .fix-impact {
+            font-size: 0.75rem;
+            padding: 0.15rem 0.5rem;
+            border-radius: 999px;
+            background: #f1f5f9;
+            color: #64748b;
+            white-space: nowrap;
+        }
+        .fix-expand {
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #94a3b8;
+            transition: transform 0.2s;
+        }
+        .fix-card.open .fix-expand { transform: rotate(180deg); }
+        .fix-details {
+            display: none;
+            padding: 0 1.25rem 1.25rem 3.5rem;
+            font-size: 0.9rem;
+            color: #475569;
+        }
+        .fix-card.open .fix-details { display: block; }
+        .fix-details h4 {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #94a3b8;
+            margin: 1rem 0 0.4rem;
+        }
+        .fix-details h4:first-child { margin-top: 0; }
+        .fix-details p { margin-bottom: 0.5rem; }
+        .fix-details code {
+            background: #f1f5f9;
+            padding: 0.15rem 0.4rem;
+            border-radius: 3px;
+            font-size: 0.85em;
+            font-family: 'SF Mono', Monaco, monospace;
+        }
+        .fix-details ul {
+            padding-left: 1.25rem;
+            margin-bottom: 0.5rem;
+        }
+        .fix-details li { margin-bottom: 0.3rem; }
+        .affected-pages {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            padding: 0.75rem 1rem;
+            margin-top: 0.5rem;
+            font-size: 0.8rem;
+            font-family: 'SF Mono', Monaco, monospace;
+            line-height: 1.5;
+        }
+        .notes-section {
+            margin-top: 1rem;
+        }
+        .notes-section h4 {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+        .notes-section h4 .note-indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: transparent;
+            transition: background 0.2s;
+        }
+        .notes-section h4 .note-indicator.has-note {
+            background: #f59e0b;
+        }
+        .notes-textarea {
+            width: 100%;
+            min-height: 60px;
+            margin-top: 0.4rem;
+            padding: 0.6rem 0.75rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-size: 0.85rem;
+            color: #334155;
+            line-height: 1.5;
+            resize: vertical;
+            transition: border-color 0.2s;
+            background: #fff;
+        }
+        .notes-textarea:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59,130,246,0.1);
+        }
+        .notes-textarea::placeholder {
+            color: #94a3b8;
+        }
+        .note-saved {
+            font-size: 0.75rem;
+            color: #059669;
+            margin-top: 0.3rem;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .note-saved.visible { opacity: 1; }
+        .info-card {
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            border-radius: 8px;
+            padding: 1rem 1.25rem;
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+            color: #166534;
+        }
+        .info-card strong { font-weight: 600; }
+        footer {
+            margin-top: 3rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid #e2e8f0;
+            font-size: 0.8rem;
+            color: #94a3b8;
+            text-align: center;
+        }
+        @media (max-width: 640px) {
+            body { padding: 1rem 0.75rem; }
+            .fix-header { padding: 0.75rem 1rem; }
+            .fix-details { padding: 0 1rem 1rem 2.75rem; }
+            .fix-impact { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav class="nav-bar">
+            <a href="index.html">Phase 1 &mdash; Technical SEO</a>
+            <a href="internal-links.html" class="active">Phase 2 &mdash; Internal Links</a>
+        </nav>
+
+        <header>
+            <h1>Trademark Financial Management</h1>
+            <div class="subtitle">Internal Link Structure Audit &mdash; Fix Tracker &bull; Source: Mileage Crawl (Apr 22, 2026)</div>
+            <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+            <div class="progress-text"><span id="progressCount">0</span> of <span id="totalCount">0</span> fixes completed</div>
+        </header>
+
+        <div class="info-card">
+            <strong>/careers/</strong> is in design and heading to development. The footer link returns 404 because the page hasn't been built yet &mdash; not a bug. Remove the footer link now; re-add it when the page ships.
+        </div>
+
+        <div id="fixList"></div>
+
+        <footer>
+            Mileage Intelligence &bull; Internal Link Audit Tracker &bull; Data persists in your browser (localStorage)
+        </footer>
+    </div>
+
+    <script>
+    const fixes = [
+        {
+            id: 'service-cross-links',
+            priority: 'critical',
+            title: 'Add "Related Services" cross-links on each service page',
+            impact: '3 pages',
+            description: 'The three core service pages are siloed &mdash; none links to the others in body content. Users and crawlers hit dead ends at every service page.',
+            fix: '<ul><li>Add a "Related Services" section at the bottom of each service page</li><li>Use descriptive anchor text &mdash; not "learn more"</li></ul><p><strong>On /services/third-party-asset-management/:</strong><br>Link to "Outsourced CIO Services" + "Investment Consulting"</p><p><strong>On /services/ocio-services/:</strong><br>Link to "Third-Party Asset Management" + "Investment Consulting"</p><p><strong>On /services/investment-consulting/:</strong><br>Link to "Third-Party Asset Management" + "Outsourced CIO Services"</p>',
+            affected: '/services/third-party-asset-management/\n/services/ocio-services/\n/services/investment-consulting/'
+        },
+        {
+            id: 'who-we-serve-children',
+            priority: 'critical',
+            title: 'Add child page links in /who-we-serve/ body',
+            impact: '1 page',
+            description: '<code>/who-we-serve/</code> acts as a parent page but does not link to its child pages in body content. The parent-child relationship is invisible to Google.',
+            fix: '<ul><li>Add prominent cards or CTA blocks in the body of /who-we-serve/ linking to both child pages</li><li>These must be in body content, not just nav &mdash; Google needs to see the relationship in the page text</li></ul><p><strong>Anchor text:</strong></p><ul><li>"Solutions for Financial Advisors" &rarr; /who-we-serve/for-professionals/</li><li>"What Our Clients Experience" &rarr; /who-we-serve/for-clients/</li></ul>',
+            affected: '/who-we-serve/'
+        },
+        {
+            id: 'orphaned-audience',
+            priority: 'high',
+            title: 'Link to audience pages from Homepage, Services, About',
+            impact: '3+ pages',
+            description: '<code>/for-professionals/</code> and <code>/for-clients/</code> receive <strong>zero inbound body links</strong> from any page. Only reachable via nav menus.',
+            fix: '<ul><li>On <strong>Homepage</strong>: add a "Who We Serve" section with cards linking to both pages</li><li>On <strong>Service pages</strong>: reference the audience ("Built for advisors who..." linking to For Professionals)</li><li>On <strong>/about/</strong>: add contextual links to both audience pages</li></ul>',
+            affected: 'Add links on: Homepage, /services/, /about/\nTargets: /who-we-serve/for-professionals/ and /who-we-serve/for-clients/'
+        },
+        {
+            id: 'broken-blog-link',
+            priority: 'high',
+            title: 'Fix broken blog link on About Us + TPAM',
+            impact: '2 pages',
+            description: 'About Us and TPAM link to <code>/trademark-update-for-november-30-2025/</code> which is a 404. The correct URL is <code>/blog/trademark-update-november-30-2025/</code>.',
+            fix: '<ul><li>Update href on both pages to the correct URL</li><li>Add 301 redirect from old slug as safety net:<br><code>/trademark-update-for-november-30-2025/ &rarr; /blog/trademark-update-november-30-2025/</code></li></ul>',
+            affected: '/about/\n/services/third-party-asset-management/'
+        },
+        {
+            id: 'faq-isolated',
+            priority: 'high',
+            title: 'Connect FAQ bidirectionally',
+            impact: '5+ pages',
+            description: '<code>/faq/</code> has no body-content links from service or audience pages. Only reachable via nav.',
+            fix: '<ul><li><strong>Outbound:</strong> Add "Have questions about outsourced investment management?" links on service + audience pages pointing to FAQ</li><li><strong>Return:</strong> FAQ answer sections should link back to relevant service pages</li><li>Creates a two-way link flow between FAQ and the service/audience content</li></ul>',
+            affected: 'Outbound from: service pages, /for-professionals/, /for-clients/\nReturn links from: /faq/ answers back to /services/*'
+        },
+        {
+            id: 'footer-cleanup',
+            priority: 'high',
+            title: 'Standardize footer + remove /careers/ link',
+            impact: 'All pages',
+            description: 'Footer varies across pages and links to /careers/ (404 &mdash; page in design, not yet built).',
+            fix: '<ul><li>Remove /careers/ link from footer site-wide (re-add when page ships)</li><li>Standardize footer across all pages &mdash; no page-specific variations</li></ul><p><strong>Links to include:</strong> Services (TPAM, OCIO, Investment Consulting) &bull; Who We Serve (For Professionals, For Clients) &bull; About/Team &bull; Contact &bull; FAQ &bull; Disclosures &bull; Privacy Policy</p>',
+            affected: 'Global footer template (affects all pages)'
+        },
+        {
+            id: 'minnesota-links',
+            priority: 'medium',
+            title: 'Add geographic links to /minnesota/',
+            impact: '2 pages',
+            description: '<code>/minnesota/</code> is the primary geographic target but gets no links from high-authority pages. Location pages need contextual reinforcement from top pages.',
+            fix: '<ul><li>Add "Serving advisors across Minnesota" with a contextual link on Homepage and Services Overview</li></ul><p><strong>Anchor text:</strong> "Serving financial advisors across Minnesota" &rarr; /minnesota/</p>',
+            affected: 'Add links on: Homepage, /services/'
+        },
+        {
+            id: 'blog-island',
+            priority: 'medium',
+            title: 'Add "Latest Insights" to core pages',
+            impact: '2+ pages',
+            description: 'No core page (Home, Services, About) links to blog content. The blog is an isolated content island receiving no authority from the main site.',
+            fix: '<ul><li>Add a dynamic "Latest Insights" section that pulls recent post titles and links to them</li><li>Place on Homepage and at least one service page</li><li>Show 3 most recent blog posts with their titles as anchor text</li></ul>',
+            affected: 'Add sections on: Homepage, at least one service page\nLinks to: 3 most recent /blog/* posts'
+        },
+        {
+            id: 'consultation-dead-end',
+            priority: 'medium',
+            title: 'Enrich consultation page with exit links',
+            impact: '1 page',
+            description: '<code>/schedule-a-consultation/</code> has a form but no links back to services, resources, or any other page. Visitors who aren\'t ready to submit have nowhere to go but leave.',
+            fix: '<ul><li>Add contextual links below the consultation form</li><li>Link to: Services Overview, FAQ, Latest Insights</li><li>Gives visitors who aren\'t ready to submit somewhere to go instead of bouncing</li></ul>',
+            affected: '/schedule-a-consultation/'
+        }
+    ];
+
+    const STORAGE_KEY = 'trademark-internal-links';
+    const NOTES_KEY = 'trademark-internal-links-notes';
+
+    function getCompleted() {
+        try {
+            return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
+        } catch { return {}; }
+    }
+
+    function saveCompleted(data) {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    }
+
+    function getNotes() {
+        try {
+            return JSON.parse(localStorage.getItem(NOTES_KEY)) || {};
+        } catch { return {}; }
+    }
+
+    function saveNotes(data) {
+        localStorage.setItem(NOTES_KEY, JSON.stringify(data));
+    }
+
+    function updateProgress() {
+        const completed = getCompleted();
+        const done = Object.values(completed).filter(Boolean).length;
+        const total = fixes.length;
+        document.getElementById('progressCount').textContent = done;
+        document.getElementById('totalCount').textContent = total;
+        document.getElementById('progressFill').style.width = `${(done / total) * 100}%`;
+    }
+
+    function renderFixes() {
+        const container = document.getElementById('fixList');
+        const completed = getCompleted();
+        const notes = getNotes();
+        const priorities = { critical: [], high: [], medium: [] };
+
+        fixes.forEach(fix => priorities[fix.priority].push(fix));
+
+        const labels = {
+            critical: 'Critical',
+            high: 'High',
+            medium: 'Medium'
+        };
+
+        let html = '';
+        for (const [priority, items] of Object.entries(priorities)) {
+            if (items.length === 0) continue;
+            html += `<div class="priority-section priority-${priority}">`;
+            html += `<div class="priority-header"><span class="priority-badge">${labels[priority]}</span><h2>${items.length} ${items.length === 1 ? 'item' : 'items'}</h2></div>`;
+            items.forEach(fix => {
+                const isCompleted = completed[fix.id] || false;
+                const note = notes[fix.id] || '';
+                const hasNote = note.trim().length > 0;
+                html += `
+                <div class="fix-card ${isCompleted ? 'completed' : ''}" data-id="${fix.id}">
+                    <div class="fix-header">
+                        <div class="fix-checkbox ${isCompleted ? 'checked' : ''}" data-id="${fix.id}"></div>
+                        <span class="fix-title">${fix.title}</span>
+                        <span class="fix-impact">${fix.impact}</span>
+                        <span class="fix-expand">&#9662;</span>
+                    </div>
+                    <div class="fix-details">
+                        <h4>What's Wrong</h4>
+                        <p>${fix.description}</p>
+                        <h4>How to Fix</h4>
+                        ${fix.fix}
+                        <h4>Affected Pages</h4>
+                        <div class="affected-pages">${fix.affected.replace(/\n/g, '<br>')}</div>
+                        <div class="notes-section">
+                            <h4><span class="note-indicator ${hasNote ? 'has-note' : ''}" data-id="${fix.id}"></span> Notes / Blockers</h4>
+                            <textarea class="notes-textarea" data-id="${fix.id}" placeholder="Stuck? Note what's blocking you here...">${note}</textarea>
+                            <div class="note-saved" data-saved="${fix.id}">Saved</div>
+                        </div>
+                    </div>
+                </div>`;
+            });
+            html += `</div>`;
+        }
+        container.innerHTML = html;
+        updateProgress();
+    }
+
+    // Checkbox + expand
+    document.addEventListener('click', (e) => {
+        const checkbox = e.target.closest('.fix-checkbox');
+        if (checkbox) {
+            e.stopPropagation();
+            const id = checkbox.dataset.id;
+            const completed = getCompleted();
+            completed[id] = !completed[id];
+            saveCompleted(completed);
+            const card = checkbox.closest('.fix-card');
+            card.classList.toggle('completed', completed[id]);
+            checkbox.classList.toggle('checked', completed[id]);
+            updateProgress();
+            return;
+        }
+
+        const header = e.target.closest('.fix-header');
+        if (header && !e.target.closest('.fix-checkbox')) {
+            header.closest('.fix-card').classList.toggle('open');
+        }
+    });
+
+    // Notes auto-save on input
+    let saveTimeout = {};
+    document.addEventListener('input', (e) => {
+        if (e.target.classList.contains('notes-textarea')) {
+            const id = e.target.dataset.id;
+            const notes = getNotes();
+            notes[id] = e.target.value;
+
+            // Update indicator
+            const indicator = document.querySelector(`.note-indicator[data-id="${id}"]`);
+            if (indicator) {
+                indicator.classList.toggle('has-note', e.target.value.trim().length > 0);
+            }
+
+            // Debounced save
+            clearTimeout(saveTimeout[id]);
+            saveTimeout[id] = setTimeout(() => {
+                saveNotes(notes);
+                const saved = document.querySelector(`[data-saved="${id}"]`);
+                if (saved) {
+                    saved.classList.add('visible');
+                    setTimeout(() => saved.classList.remove('visible'), 1500);
+                }
+            }, 500);
+        }
+    });
+
+    // Prevent expand/collapse when clicking inside textarea
+    document.addEventListener('click', (e) => {
+        if (e.target.classList.contains('notes-textarea')) {
+            e.stopPropagation();
+        }
+    }, true);
+
+    renderFixes();
+    </script>
+</body>
+</html>
