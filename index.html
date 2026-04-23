@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trademark Financial — Technical SEO Tracker</title>
+    <title>Trademark Financial — SEO Fix Tracker</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -40,14 +40,49 @@
             color: #64748b;
             font-weight: 500;
         }
+
+        /* ── Phase Sections ── */
+        .phase-section {
+            margin-bottom: 2.5rem;
+        }
+        .phase-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.25rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .phase-header h2 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #0f172a;
+        }
+        .phase-badge {
+            padding: 0.2rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            background: #0f172a;
+            color: white;
+        }
+        .phase-subtitle {
+            font-size: 0.85rem;
+            color: #64748b;
+            margin-bottom: 1.25rem;
+        }
+
+        /* ── Priority Groups ── */
         .priority-section {
-            margin-bottom: 2rem;
+            margin-bottom: 1.5rem;
         }
         .priority-header {
             display: flex;
             align-items: center;
             gap: 0.5rem;
-            margin-bottom: 1rem;
+            margin-bottom: 0.75rem;
         }
         .priority-badge {
             padding: 0.2rem 0.6rem;
@@ -60,7 +95,9 @@
         .priority-critical .priority-badge { background: #fef2f2; color: #dc2626; }
         .priority-high .priority-badge { background: #fff7ed; color: #ea580c; }
         .priority-medium .priority-badge { background: #fefce8; color: #ca8a04; }
-        .priority-header h2 { font-size: 1.1rem; font-weight: 600; }
+        .priority-header h3 { font-size: 0.95rem; font-weight: 600; color: #334155; }
+
+        /* ── Fix Cards ── */
         .fix-card {
             background: white;
             border: 1px solid #e2e8f0;
@@ -162,17 +199,66 @@
             overflow-y: auto;
             font-size: 0.8rem;
             font-family: 'SF Mono', Monaco, monospace;
+            line-height: 1.5;
         }
-        .week-label {
-            display: inline-block;
-            font-size: 0.7rem;
-            padding: 0.1rem 0.4rem;
-            background: #ede9fe;
-            color: #6d28d9;
-            border-radius: 3px;
-            margin-left: 0.5rem;
-            font-weight: 500;
+
+        /* ── Notes / Blockers ── */
+        .notes-section { margin-top: 1rem; }
+        .notes-section h4 {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
         }
+        .note-indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: transparent;
+            transition: background 0.2s;
+        }
+        .note-indicator.has-note { background: #f59e0b; }
+        .notes-textarea {
+            width: 100%;
+            min-height: 60px;
+            margin-top: 0.4rem;
+            padding: 0.6rem 0.75rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-size: 0.85rem;
+            color: #334155;
+            line-height: 1.5;
+            resize: vertical;
+            transition: border-color 0.2s;
+            background: #fff;
+        }
+        .notes-textarea:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59,130,246,0.1);
+        }
+        .notes-textarea::placeholder { color: #94a3b8; }
+        .note-saved {
+            font-size: 0.75rem;
+            color: #059669;
+            margin-top: 0.3rem;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .note-saved.visible { opacity: 1; }
+
+        /* ── Info Callout ── */
+        .info-card {
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            margin-bottom: 1rem;
+            font-size: 0.85rem;
+            color: #166534;
+        }
+        .info-card strong { font-weight: 600; }
+
         footer {
             margin-top: 3rem;
             padding-top: 1.5rem;
@@ -180,26 +266,6 @@
             font-size: 0.8rem;
             color: #94a3b8;
             text-align: center;
-        }
-        .nav-bar {
-            display: flex;
-            gap: 0.5rem;
-            margin-bottom: 1.5rem;
-            font-size: 0.85rem;
-        }
-        .nav-bar a {
-            padding: 0.4rem 0.8rem;
-            border-radius: 6px;
-            text-decoration: none;
-            color: #64748b;
-            background: #f1f5f9;
-            font-weight: 500;
-            transition: all 0.2s;
-        }
-        .nav-bar a:hover { background: #e2e8f0; color: #334155; }
-        .nav-bar a.active {
-            background: #0f172a;
-            color: white;
         }
         @media (max-width: 640px) {
             body { padding: 1rem 0.75rem; }
@@ -211,14 +277,9 @@
 </head>
 <body>
     <div class="container">
-        <nav class="nav-bar">
-            <a href="index.html" class="active">Phase 1 &mdash; Technical SEO</a>
-            <a href="internal-links.html">Phase 2 &mdash; Internal Links</a>
-        </nav>
-
         <header>
             <h1>Trademark Financial Management</h1>
-            <div class="subtitle">Technical SEO Phase 1 — Fix Tracker &bull; Source: SEMRush Audit (Apr 19, 2026)</div>
+            <div class="subtitle">SEO Fix Tracker &bull; Mileage Intelligence</div>
             <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
             <div class="progress-text"><span id="progressCount">0</span> of <span id="totalCount">0</span> fixes completed</div>
         </header>
@@ -226,190 +287,333 @@
         <div id="fixList"></div>
 
         <footer>
-            Mileage Intelligence &bull; Technical SEO Tracker &bull; Data persists in your browser (localStorage)
+            Mileage Intelligence &bull; SEO Fix Tracker &bull; Data persists in your browser (localStorage)
         </footer>
     </div>
 
     <script>
-    const fixes = [
+    const phases = [
         {
-            id: 'cf-email',
-            priority: 'critical',
-            week: 1,
-            title: 'Fix Cloudflare email obfuscation broken links',
-            impact: '40+ pages',
-            root_cause: 'Cloudflare\'s Email Address Obfuscation feature generates crawlable links to <code>/cdn-cgi/l/email-protection</code> that return 404. This is the single largest source of broken internal links on the site.',
-            fix: '<ul><li>Log into Cloudflare Dashboard</li><li>Go to the domain <strong>trademarkfinancial.us</strong></li><li>Navigate to <strong>Speed &gt; Optimization &gt; Content Optimization</strong></li><li>Toggle OFF "Email Address Obfuscation"</li><li>OR: Ensure all email addresses in the site theme use proper <code>mailto:</code> links rather than plain text (Cloudflare won\'t obfuscate <code>mailto:</code> links)</li></ul><p>After disabling, re-crawl to confirm all <code>/cdn-cgi/l/email-protection</code> references are gone.</p>',
-            affected: '/cdn-cgi/l/email-protection linked from: Homepage, About Us, Services (all 3), Contact, Team, Privacy Policy, Disclaimer, For Clients, For Professionals, FAQ, Location/Minnesota, Schedule a Consultation, Blog index, all blog pagination pages (2-8, 54-59), and 20+ individual blog posts'
+            id: 'phase1',
+            title: 'Technical SEO',
+            badge: 'Phase 1',
+            subtitle: 'Source: SEMRush Audit (Apr 19, 2026)',
+            fixes: [
+                {
+                    id: 'cf-email',
+                    priority: 'critical',
+                    title: 'Fix Cloudflare email obfuscation broken links',
+                    impact: '40+ pages',
+                    description: 'Cloudflare\'s Email Address Obfuscation feature generates crawlable links to <code>/cdn-cgi/l/email-protection</code> that return 404. This is the single largest source of broken internal links on the site.',
+                    fix: '<ul><li>Log into Cloudflare Dashboard</li><li>Go to the domain <strong>trademarkfinancial.us</strong></li><li>Navigate to <strong>Speed &gt; Optimization &gt; Content Optimization</strong></li><li>Toggle OFF "Email Address Obfuscation"</li><li>OR: Ensure all email addresses in the site theme use proper <code>mailto:</code> links rather than plain text (Cloudflare won\'t obfuscate <code>mailto:</code> links)</li></ul><p>After disabling, re-crawl to confirm all <code>/cdn-cgi/l/email-protection</code> references are gone.</p>',
+                    affected: '/cdn-cgi/l/email-protection linked from: Homepage, About Us, Services (all 3), Contact, Team, Privacy Policy, Disclaimer, For Clients, For Professionals, FAQ, Location/Minnesota, Schedule a Consultation, Blog index, all blog pagination pages (2-8, 54-59), and 20+ individual blog posts'
+                },
+                {
+                    id: 'schedule-redirect',
+                    priority: 'critical',
+                    title: 'Redirect /schedule-consultation/ to /schedule-a-consultation/',
+                    impact: '20+ blog posts',
+                    description: 'Blog posts use <code>/schedule-consultation/</code> as the CTA link, but the actual page lives at <code>/schedule-a-consultation/</code>. Every blog post\'s CTA is broken.',
+                    fix: '<ul><li><strong>Step 1 (immediate):</strong> Add a 301 redirect in WordPress or Cloudflare:<br><code>/schedule-consultation/ &rarr; /schedule-a-consultation/</code></li><li><strong>Step 2 (cleanup):</strong> Search-and-replace in blog post content to update all CTA links to the correct URL</li><li>In WordPress: Tools &gt; Search &amp; Replace, or use Better Search Replace plugin</li><li>Search: <code>/schedule-consultation/</code><br>Replace: <code>/schedule-a-consultation/</code></li></ul>',
+                    affected: 'Nearly every blog post links to this wrong URL: quarterly perspectives, market thoughts, trademark updates, market summaries — all published posts with a CTA'
+                },
+                {
+                    id: 'sitemap-canonical',
+                    priority: 'critical',
+                    title: 'Fix 33 non-canonical URLs in post-sitemap.xml',
+                    impact: '33 blog posts',
+                    description: 'The <code>post-sitemap.xml</code> includes URLs that don\'t match their canonical tags. This sends Google conflicting signals about the preferred URL for 33 blog posts.',
+                    fix: '<ul><li>Check if the site uses Yoast or RankMath for sitemap generation</li><li>In WordPress, go to the SEO plugin settings and regenerate sitemaps</li><li>Verify: each URL in the sitemap must match the <code>rel="canonical"</code> tag on the page it points to</li><li>Common cause: trailing slash inconsistency or www/non-www mismatch. Check Settings &gt; General &gt; Site Address to confirm the canonical domain format</li><li>After fix, submit updated sitemap in Google Search Console</li></ul>',
+                    affected: 'All 33 URLs are blog posts in post-sitemap.xml — quarterly perspectives, market perspectives, trademark updates, market thoughts, and market summaries from 2011 through 2026'
+                },
+                {
+                    id: 'meta-descriptions',
+                    priority: 'high',
+                    title: 'Write meta descriptions for all 64 pages',
+                    impact: '64 pages (100%)',
+                    description: 'Zero pages on the site have meta descriptions. Google is auto-generating all search snippets, which likely doesn\'t align with Trademark\'s professional TPAM positioning.',
+                    fix: '<ul><li><strong>Core pages first:</strong></li><li>Homepage: focus on TPAM value prop for advisors (150-160 chars)</li><li>Services overview + 3 service pages: unique description per service</li><li>About Us, Team, Contact, Schedule a Consultation</li><li>For Clients, For Professionals, Who We Serve</li><li>Location/Minnesota</li><li><strong>Blog posts:</strong></li><li>Start with newest posts (2025-2026) — they get the most traffic</li><li>For older posts (2011 era), use a template: "Mark Carlton, CFA shares [topic] in this [quarterly/market] perspective from Trademark Financial Management."</li><li><strong>Pagination pages:</strong> Use template: "Page [N] of market insights and perspectives from Trademark Financial Management."</li><li><strong>Where to edit:</strong> In WordPress, use the SEO plugin\'s meta description field on each page/post edit screen</li></ul>',
+                    affected: 'Every single page on the site including: homepage, all service pages, about, team, contact, disclaimer, privacy policy, disaster recovery, FAQ, for-clients, for-professionals, who-we-serve, location/minnesota, schedule-a-consultation, blog index, all blog pagination, and all individual blog posts'
+                },
+                {
+                    id: 'november-redirect',
+                    priority: 'high',
+                    title: 'Redirect /trademark-update-for-november-30-2025/',
+                    impact: '2 pages',
+                    description: 'About Us and Services/Third-Party Asset Management pages link to <code>/trademark-update-for-november-30-2025/</code> which doesn\'t exist. The correct URL is <code>/blog/trademark-update-november-30-2025/</code>.',
+                    fix: '<ul><li>Add 301 redirect:<br><code>/trademark-update-for-november-30-2025/ &rarr; /blog/trademark-update-november-30-2025/</code></li><li>Then update the links on the About Us and Services/TPAM pages to point to the correct URL</li></ul>',
+                    affected: '/about-us/ and /services/third-party-asset-management/ both link to the wrong slug'
+                },
+                {
+                    id: 'robots-txt',
+                    priority: 'high',
+                    title: 'Fix malformed robots.txt directive',
+                    impact: 'Site-wide crawl',
+                    description: 'The robots.txt contains a non-standard line: <code>Content-Signal: search=yes,ai-train=no</code>. This isn\'t part of the robots.txt specification and may confuse strict parsers.',
+                    fix: '<ul><li><strong>Option A (recommended):</strong> Remove the line from robots.txt. Instead, express AI training preferences via:</li><li>HTTP response headers: <code>X-Robots-Tag: noai, noimageai</code></li><li>A dedicated <code>/llms.txt</code> file (see next fix)</li><li>Meta tags: <code>&lt;meta name="robots" content="noai, noimageai"&gt;</code></li><li><strong>Option B:</strong> Keep the line — most crawlers ignore unknown directives. Document that this is intentional.</li><li><strong>Where to edit:</strong> Check if Yoast/RankMath manages robots.txt, or edit the physical file at the WordPress root</li></ul>',
+                    affected: 'N/A — affects all crawlers parsing robots.txt'
+                },
+                {
+                    id: 'llms-txt',
+                    priority: 'high',
+                    title: 'Create /llms.txt for GEO discoverability',
+                    impact: 'AI/LLM visibility',
+                    description: 'The site signals AI crawl preferences in robots.txt but has no <code>/llms.txt</code> file. This is a GEO (Generative Engine Optimization) opportunity to control how AI models understand Trademark Financial.',
+                    fix: '<ul><li>Create a <code>/llms.txt</code> file at the WordPress root</li><li>Content should describe: what Trademark Financial is (TPAM), who they serve (advisors/RIAs), their services, and their expertise</li><li>Reference the GEO strategy review already in the strategy folder for the full approach</li><li>Format: plain text, structured for LLM consumption</li><li>Deploy via WordPress file manager or FTP/SFTP</li></ul>',
+                    affected: 'N/A — new file creation'
+                },
+                {
+                    id: 'title-length',
+                    priority: 'medium',
+                    title: 'Shorten 3 over-length title tags',
+                    impact: '3 pages',
+                    description: 'Three blog post titles exceed Google\'s ~60 character display limit. The brand suffix " - Trademark Financial Management" (34 chars) consumes half the available space.',
+                    fix: '<ul><li><strong>Option A:</strong> Shorten brand suffix site-wide for blog posts:<br>From: " - Trademark Financial Management"<br>To: " | Trademark Financial" (saves 12 chars)</li><li><strong>Option B:</strong> Shorten individual post titles:</li><li><code>Trademark Market Perspective for 11/01/2023</code> &rarr; <code>Market Perspective: Nov 2023</code></li><li><code>Quarterly Market Summary - January 21, 2026</code> &rarr; <code>Q4 2025 Market Summary</code></li><li><code>Quarterly Perspective for 4Q10, Mark Carlton, CFA</code> &rarr; <code>Q4 2010 Perspective</code></li><li><strong>Where to edit:</strong> SEO plugin title field on each post, or configure the SEO plugin\'s title template for posts</li></ul>',
+                    affected: '/blog/trademark-market-perspective-for-11-01-2023/\n/blog/quarterly-market-summary-january-21-2026/\n/blog/quarterly-perspective-for-4q10-mark-carlton-cfa/'
+                },
+                {
+                    id: 'external-broken',
+                    priority: 'medium',
+                    title: 'Fix external broken link (johnmauldin.com)',
+                    impact: '1 page',
+                    description: 'The blog post "Market Perspective — Mark Carlton, CFA" links to <code>http://www.johnmauldin.com/</code> which returns a 503 error.',
+                    fix: '<ul><li>Check if johnmauldin.com is permanently down or temporarily unavailable</li><li>If permanent: remove the link or replace with an archived version (Wayback Machine)</li><li>If temporary: monitor and revisit in 1 week</li><li>Also note: the link uses <code>http://</code> — if the site comes back, update to <code>https://</code></li></ul>',
+                    affected: '/blog/market-perspective-mark-carlton-cfa/'
+                },
+                {
+                    id: 'broken-image',
+                    priority: 'medium',
+                    title: 'Fix broken image on Quarterly Market Summary',
+                    impact: '1 page',
+                    description: 'The image <code>/wp-content/uploads/2026/02/10a26b_3c66dcc42b8d4e6290bb34c3fd7bcd70.jpg</code> returns 404. The filename pattern (hex hash) suggests a Wix migration artifact.',
+                    fix: '<ul><li>Navigate to the post in WordPress editor: /blog/quarterly-market-summary/</li><li>Find the broken image block</li><li>Either re-upload the correct image or remove the broken reference</li><li>If the original image exists elsewhere (check Wix export or client\'s files), re-upload to WordPress Media Library</li></ul>',
+                    affected: '/blog/quarterly-market-summary/'
+                },
+                {
+                    id: 'anchor-text',
+                    priority: 'medium',
+                    title: 'Add anchor text to 27 links',
+                    impact: '27 links',
+                    description: '26 blog pagination links (prev/next) have no visible anchor text, and 1 external link to ritholtz.com lacks anchor text. Search engines use anchor text to understand link context.',
+                    fix: '<ul><li><strong>Pagination (theme fix):</strong></li><li>Locate the pagination template in the WordPress theme (likely <code>template-parts/pagination.php</code> or similar)</li><li>Add <code>aria-label="Page [N]"</code> and visible text like "Previous" / "Next" or page numbers</li><li><strong>Ritholtz link (content fix):</strong></li><li>Edit the blog post: /blog/market-thoughts-march-4-2025/</li><li>Find the bare link to ritholtz.com and add descriptive anchor text (e.g., "Barry Ritholtz on controlling your limbic system")</li></ul>',
+                    affected: 'Blog pagination: pages 2-8, 54-59 (prev/next links)\nBlog post: /blog/market-thoughts-march-4-2025/ (ritholtz.com link)'
+                }
+            ]
         },
         {
-            id: 'schedule-redirect',
-            priority: 'critical',
-            week: 1,
-            title: 'Redirect /schedule-consultation/ to /schedule-a-consultation/',
-            impact: '20+ blog posts',
-            root_cause: 'Blog posts use <code>/schedule-consultation/</code> as the CTA link, but the actual page lives at <code>/schedule-a-consultation/</code>. Every blog post\'s CTA is broken.',
-            fix: '<ul><li><strong>Step 1 (immediate):</strong> Add a 301 redirect in WordPress or Cloudflare:<br><code>/schedule-consultation/ → /schedule-a-consultation/</code></li><li><strong>Step 2 (cleanup):</strong> Search-and-replace in blog post content to update all CTA links to the correct URL</li><li>In WordPress: Tools &gt; Search & Replace, or use Better Search Replace plugin</li><li>Search: <code>/schedule-consultation/</code><br>Replace: <code>/schedule-a-consultation/</code></li></ul>',
-            affected: 'Nearly every blog post links to this wrong URL: quarterly perspectives, market thoughts, trademark updates, market summaries — all published posts with a CTA'
-        },
-        {
-            id: 'sitemap-canonical',
-            priority: 'critical',
-            week: 1,
-            title: 'Fix 33 non-canonical URLs in post-sitemap.xml',
-            impact: '33 blog posts',
-            root_cause: 'The <code>post-sitemap.xml</code> includes URLs that don\'t match their canonical tags. This sends Google conflicting signals about the preferred URL for 33 blog posts.',
-            fix: '<ul><li>Check if the site uses Yoast or RankMath for sitemap generation</li><li>In WordPress, go to the SEO plugin settings and regenerate sitemaps</li><li>Verify: each URL in the sitemap must match the <code>rel="canonical"</code> tag on the page it points to</li><li>Common cause: trailing slash inconsistency or www/non-www mismatch. Check Settings &gt; General &gt; Site Address to confirm the canonical domain format</li><li>After fix, submit updated sitemap in Google Search Console</li></ul>',
-            affected: 'All 33 URLs are blog posts in post-sitemap.xml — quarterly perspectives, market perspectives, trademark updates, market thoughts, and market summaries from 2011 through 2026'
-        },
-        {
-            id: 'meta-descriptions',
-            priority: 'high',
-            week: '2-3',
-            title: 'Write meta descriptions for all 64 pages',
-            impact: '64 pages (100%)',
-            root_cause: 'Zero pages on the site have meta descriptions. Google is auto-generating all search snippets, which likely doesn\'t align with Trademark\'s professional TPAM positioning.',
-            fix: '<ul><li><strong>Core pages first (Week 2):</strong></li><li>Homepage: focus on TPAM value prop for advisors (150-160 chars)</li><li>Services overview + 3 service pages: unique description per service</li><li>About Us, Team, Contact, Schedule a Consultation</li><li>For Clients, For Professionals, Who We Serve</li><li>Location/Minnesota</li><li><strong>Blog posts (Week 3):</strong></li><li>Start with newest posts (2025-2026) — they get the most traffic</li><li>For older posts (2011 era), use a template: "Mark Carlton, CFA shares [topic] in this [quarterly/market] perspective from Trademark Financial Management."</li><li><strong>Pagination pages:</strong> Use template: "Page [N] of market insights and perspectives from Trademark Financial Management."</li><li><strong>Where to edit:</strong> In WordPress, use the SEO plugin\'s meta description field on each page/post edit screen</li></ul>',
-            affected: 'Every single page on the site including: homepage, all service pages, about, team, contact, disclaimer, privacy policy, disaster recovery, FAQ, for-clients, for-professionals, who-we-serve, location/minnesota, schedule-a-consultation, blog index, all blog pagination, and all individual blog posts'
-        },
-        {
-            id: 'november-redirect',
-            priority: 'high',
-            week: 2,
-            title: 'Redirect /trademark-update-for-november-30-2025/',
-            impact: '2 pages',
-            root_cause: 'About Us and Services/Third-Party Asset Management pages link to <code>/trademark-update-for-november-30-2025/</code> which doesn\'t exist. The correct URL is <code>/blog/trademark-update-november-30-2025/</code>.',
-            fix: '<ul><li>Add 301 redirect:<br><code>/trademark-update-for-november-30-2025/ → /blog/trademark-update-november-30-2025/</code></li><li>Then update the links on the About Us and Services/TPAM pages to point to the correct URL</li></ul>',
-            affected: '/about-us/ and /services/third-party-asset-management/ both link to the wrong slug'
-        },
-        {
-            id: 'robots-txt',
-            priority: 'high',
-            week: 2,
-            title: 'Fix malformed robots.txt directive',
-            impact: 'Site-wide crawl',
-            root_cause: 'The robots.txt contains a non-standard line: <code>Content-Signal: search=yes,ai-train=no</code>. This isn\'t part of the robots.txt specification and may confuse strict parsers.',
-            fix: '<ul><li><strong>Option A (recommended):</strong> Remove the line from robots.txt. Instead, express AI training preferences via:</li><li>HTTP response headers: <code>X-Robots-Tag: noai, noimageai</code></li><li>A dedicated <code>/llms.txt</code> file (see next fix)</li><li>Meta tags: <code>&lt;meta name="robots" content="noai, noimageai"&gt;</code></li><li><strong>Option B:</strong> Keep the line — most crawlers ignore unknown directives. Document that this is intentional.</li><li><strong>Where to edit:</strong> Check if Yoast/RankMath manages robots.txt, or edit the physical file at the WordPress root</li></ul>',
-            affected: 'N/A — affects all crawlers parsing robots.txt'
-        },
-        {
-            id: 'llms-txt',
-            priority: 'high',
-            week: 4,
-            title: 'Create /llms.txt for GEO discoverability',
-            impact: 'AI/LLM visibility',
-            root_cause: 'The site signals AI crawl preferences in robots.txt but has no <code>/llms.txt</code> file. This is a GEO (Generative Engine Optimization) opportunity to control how AI models understand Trademark Financial.',
-            fix: '<ul><li>Create a <code>/llms.txt</code> file at the WordPress root</li><li>Content should describe: what Trademark Financial is (TPAM), who they serve (advisors/RIAs), their services, and their expertise</li><li>Reference the GEO strategy review already in the strategy folder for the full approach</li><li>Format: plain text, structured for LLM consumption</li><li>Deploy via WordPress file manager or FTP/SFTP</li></ul>',
-            affected: 'N/A — new file creation'
-        },
-        {
-            id: 'title-length',
-            priority: 'medium',
-            week: 3,
-            title: 'Shorten 3 over-length title tags',
-            impact: '3 pages',
-            root_cause: 'Three blog post titles exceed Google\'s ~60 character display limit. The brand suffix " - Trademark Financial Management" (34 chars) consumes half the available space.',
-            fix: '<ul><li><strong>Option A:</strong> Shorten brand suffix site-wide for blog posts:<br>From: " - Trademark Financial Management"<br>To: " | Trademark Financial" (saves 12 chars)</li><li><strong>Option B:</strong> Shorten individual post titles:</li><li><code>Trademark Market Perspective for 11/01/2023</code> → <code>Market Perspective: Nov 2023</code></li><li><code>Quarterly Market Summary - January 21, 2026</code> → <code>Q4 2025 Market Summary</code></li><li><code>Quarterly Perspective for 4Q10, Mark Carlton, CFA</code> → <code>Q4 2010 Perspective</code></li><li><strong>Where to edit:</strong> SEO plugin title field on each post, or configure the SEO plugin\'s title template for posts</li></ul>',
-            affected: '/blog/trademark-market-perspective-for-11-01-2023/<br>/blog/quarterly-market-summary-january-21-2026/<br>/blog/quarterly-perspective-for-4q10-mark-carlton-cfa/'
-        },
-        {
-            id: 'external-broken',
-            priority: 'medium',
-            week: 2,
-            title: 'Fix external broken link (johnmauldin.com)',
-            impact: '1 page',
-            root_cause: 'The blog post "Market Perspective — Mark Carlton, CFA" links to <code>http://www.johnmauldin.com/</code> which returns a 503 error.',
-            fix: '<ul><li>Check if johnmauldin.com is permanently down or temporarily unavailable</li><li>If permanent: remove the link or replace with an archived version (Wayback Machine)</li><li>If temporary: monitor and revisit in 1 week</li><li>Also note: the link uses <code>http://</code> — if the site comes back, update to <code>https://</code></li></ul>',
-            affected: '/blog/market-perspective-mark-carlton-cfa/'
-        },
-        {
-            id: 'broken-image',
-            priority: 'medium',
-            week: 2,
-            title: 'Fix broken image on Quarterly Market Summary',
-            impact: '1 page',
-            root_cause: 'The image <code>/wp-content/uploads/2026/02/10a26b_3c66dcc42b8d4e6290bb34c3fd7bcd70.jpg</code> returns 404. The filename pattern (hex hash) suggests a Wix migration artifact.',
-            fix: '<ul><li>Navigate to the post in WordPress editor: /blog/quarterly-market-summary/</li><li>Find the broken image block</li><li>Either re-upload the correct image or remove the broken reference</li><li>If the original image exists elsewhere (check Wix export or client\'s files), re-upload to WordPress Media Library</li></ul>',
-            affected: '/blog/quarterly-market-summary/'
-        },
-        {
-            id: 'anchor-text',
-            priority: 'medium',
-            week: 3,
-            title: 'Add anchor text to 27 links',
-            impact: '27 links',
-            root_cause: '26 blog pagination links (prev/next) have no visible anchor text, and 1 external link to ritholtz.com lacks anchor text. Search engines use anchor text to understand link context.',
-            fix: '<ul><li><strong>Pagination (theme fix):</strong></li><li>Locate the pagination template in the WordPress theme (likely <code>template-parts/pagination.php</code> or similar)</li><li>Add <code>aria-label="Page [N]"</code> and visible text like "Previous" / "Next" or page numbers</li><li><strong>Ritholtz link (content fix):</strong></li><li>Edit the blog post: /blog/market-thoughts-march-4-2025/</li><li>Find the bare link to ritholtz.com and add descriptive anchor text (e.g., "Barry Ritholtz on controlling your limbic system")</li></ul>',
-            affected: 'Blog pagination: pages 2-8, 54-59 (prev/next links)<br>Blog post: /blog/market-thoughts-march-4-2025/ (ritholtz.com link)'
+            id: 'phase2',
+            title: 'Internal Link Structure',
+            badge: 'Phase 2',
+            subtitle: 'Source: Mileage Crawl (Apr 22, 2026)',
+            callout: '<strong>/careers/</strong> is in design and heading to development. The footer link returns 404 because the page hasn\'t been built yet — not a bug. Remove the footer link now; re-add it when the page ships.',
+            fixes: [
+                {
+                    id: 'service-cross-links',
+                    priority: 'critical',
+                    title: 'Add "Related Services" cross-links on each service page',
+                    impact: '3 pages',
+                    description: 'The three core service pages are siloed — none links to the others in body content. Users and crawlers hit dead ends at every service page.',
+                    fix: '<ul><li>Add a "Related Services" section at the bottom of each service page</li><li>Use descriptive anchor text — not "learn more"</li></ul><p><strong>On /services/third-party-asset-management/:</strong><br>Link to "Outsourced CIO Services" + "Investment Consulting"</p><p><strong>On /services/ocio-services/:</strong><br>Link to "Third-Party Asset Management" + "Investment Consulting"</p><p><strong>On /services/investment-consulting/:</strong><br>Link to "Third-Party Asset Management" + "Outsourced CIO Services"</p>',
+                    affected: '/services/third-party-asset-management/\n/services/ocio-services/\n/services/investment-consulting/'
+                },
+                {
+                    id: 'who-we-serve-children',
+                    priority: 'critical',
+                    title: 'Add child page links in /who-we-serve/ body',
+                    impact: '1 page',
+                    description: '<code>/who-we-serve/</code> acts as a parent page but does not link to its child pages in body content. The parent-child relationship is invisible to Google.',
+                    fix: '<ul><li>Add prominent cards or CTA blocks in the body of /who-we-serve/ linking to both child pages</li><li>These must be in body content, not just nav — Google needs to see the relationship in the page text</li></ul><p><strong>Anchor text:</strong></p><ul><li>"Solutions for Financial Advisors" &rarr; /who-we-serve/for-professionals/</li><li>"What Our Clients Experience" &rarr; /who-we-serve/for-clients/</li></ul>',
+                    affected: '/who-we-serve/'
+                },
+                {
+                    id: 'orphaned-audience',
+                    priority: 'high',
+                    title: 'Link to audience pages from Homepage, Services, About',
+                    impact: '3+ pages',
+                    description: '<code>/for-professionals/</code> and <code>/for-clients/</code> receive <strong>zero inbound body links</strong> from any page. Only reachable via nav menus.',
+                    fix: '<ul><li>On <strong>Homepage</strong>: add a "Who We Serve" section with cards linking to both pages</li><li>On <strong>Service pages</strong>: reference the audience ("Built for advisors who..." linking to For Professionals)</li><li>On <strong>/about/</strong>: add contextual links to both audience pages</li></ul>',
+                    affected: 'Add links on: Homepage, /services/, /about/\nTargets: /who-we-serve/for-professionals/ and /who-we-serve/for-clients/'
+                },
+                {
+                    id: 'broken-blog-link',
+                    priority: 'high',
+                    title: 'Fix broken blog link on About Us + TPAM',
+                    impact: '2 pages',
+                    description: 'About Us and TPAM link to <code>/trademark-update-for-november-30-2025/</code> which is a 404. The correct URL is <code>/blog/trademark-update-november-30-2025/</code>.',
+                    fix: '<ul><li>Update href on both pages to the correct URL</li><li>Add 301 redirect from old slug as safety net:<br><code>/trademark-update-for-november-30-2025/ &rarr; /blog/trademark-update-november-30-2025/</code></li></ul>',
+                    affected: '/about/\n/services/third-party-asset-management/'
+                },
+                {
+                    id: 'faq-isolated',
+                    priority: 'high',
+                    title: 'Connect FAQ bidirectionally',
+                    impact: '5+ pages',
+                    description: '<code>/faq/</code> has no body-content links from service or audience pages. Only reachable via nav.',
+                    fix: '<ul><li><strong>Outbound:</strong> Add "Have questions about outsourced investment management?" links on service + audience pages pointing to FAQ</li><li><strong>Return:</strong> FAQ answer sections should link back to relevant service pages</li><li>Creates a two-way link flow between FAQ and the service/audience content</li></ul>',
+                    affected: 'Outbound from: service pages, /for-professionals/, /for-clients/\nReturn links from: /faq/ answers back to /services/*'
+                },
+                {
+                    id: 'footer-cleanup',
+                    priority: 'high',
+                    title: 'Standardize footer + remove /careers/ link',
+                    impact: 'All pages',
+                    description: 'Footer varies across pages and links to /careers/ (404 — page in design, not yet built).',
+                    fix: '<ul><li>Remove /careers/ link from footer site-wide (re-add when page ships)</li><li>Standardize footer across all pages — no page-specific variations</li></ul><p><strong>Links to include:</strong> Services (TPAM, OCIO, Investment Consulting) &bull; Who We Serve (For Professionals, For Clients) &bull; About/Team &bull; Contact &bull; FAQ &bull; Disclosures &bull; Privacy Policy</p>',
+                    affected: 'Global footer template (affects all pages)'
+                },
+                {
+                    id: 'minnesota-links',
+                    priority: 'medium',
+                    title: 'Add geographic links to /minnesota/',
+                    impact: '2 pages',
+                    description: '<code>/minnesota/</code> is the primary geographic target but gets no links from high-authority pages. Location pages need contextual reinforcement from top pages.',
+                    fix: '<ul><li>Add "Serving advisors across Minnesota" with a contextual link on Homepage and Services Overview</li></ul><p><strong>Anchor text:</strong> "Serving financial advisors across Minnesota" &rarr; /minnesota/</p>',
+                    affected: 'Add links on: Homepage, /services/'
+                },
+                {
+                    id: 'blog-island',
+                    priority: 'medium',
+                    title: 'Add "Latest Insights" to core pages',
+                    impact: '2+ pages',
+                    description: 'No core page (Home, Services, About) links to blog content. The blog is an isolated content island receiving no authority from the main site.',
+                    fix: '<ul><li>Add a dynamic "Latest Insights" section that pulls recent post titles and links to them</li><li>Place on Homepage and at least one service page</li><li>Show 3 most recent blog posts with their titles as anchor text</li></ul>',
+                    affected: 'Add sections on: Homepage, at least one service page\nLinks to: 3 most recent /blog/* posts'
+                },
+                {
+                    id: 'consultation-dead-end',
+                    priority: 'medium',
+                    title: 'Enrich consultation page with exit links',
+                    impact: '1 page',
+                    description: '<code>/schedule-a-consultation/</code> has a form but no links back to services, resources, or any other page. Visitors who aren\'t ready to submit have nowhere to go but leave.',
+                    fix: '<ul><li>Add contextual links below the consultation form</li><li>Link to: Services Overview, FAQ, Latest Insights</li><li>Gives visitors who aren\'t ready to submit somewhere to go instead of bouncing</li></ul>',
+                    affected: '/schedule-a-consultation/'
+                }
+            ]
         }
     ];
 
+    // Unified storage — preserves any existing Phase 1 data
     const STORAGE_KEY = 'trademark-seo-fixes';
+    const NOTES_KEY = 'trademark-seo-notes';
 
     function getCompleted() {
-        try {
-            return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
-        } catch { return {}; }
+        try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; }
+        catch { return {}; }
     }
-
     function saveCompleted(data) {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    }
+    function getNotes() {
+        try { return JSON.parse(localStorage.getItem(NOTES_KEY)) || {}; }
+        catch { return {}; }
+    }
+    function saveNotes(data) {
+        localStorage.setItem(NOTES_KEY, JSON.stringify(data));
+    }
+
+    // Migrate notes from old internal-links key if present
+    (function migrateNotes() {
+        try {
+            const old = JSON.parse(localStorage.getItem('trademark-internal-links-notes'));
+            if (old && Object.keys(old).length > 0) {
+                const current = getNotes();
+                Object.assign(current, old);
+                saveNotes(current);
+                localStorage.removeItem('trademark-internal-links-notes');
+            }
+        } catch {}
+        // Also merge any old internal-links checkbox data
+        try {
+            const old = JSON.parse(localStorage.getItem('trademark-internal-links'));
+            if (old && Object.keys(old).length > 0) {
+                const current = getCompleted();
+                Object.assign(current, old);
+                saveCompleted(current);
+                localStorage.removeItem('trademark-internal-links');
+            }
+        } catch {}
+    })();
+
+    function getAllFixes() {
+        return phases.flatMap(p => p.fixes);
     }
 
     function updateProgress() {
         const completed = getCompleted();
-        const done = Object.values(completed).filter(Boolean).length;
-        const total = fixes.length;
+        const all = getAllFixes();
+        const done = all.filter(f => completed[f.id]).length;
         document.getElementById('progressCount').textContent = done;
-        document.getElementById('totalCount').textContent = total;
-        document.getElementById('progressFill').style.width = `${(done / total) * 100}%`;
+        document.getElementById('totalCount').textContent = all.length;
+        document.getElementById('progressFill').style.width = `${(done / all.length) * 100}%`;
     }
 
     function renderFixes() {
         const container = document.getElementById('fixList');
         const completed = getCompleted();
-        const priorities = { critical: [], high: [], medium: [] };
+        const notes = getNotes();
 
-        fixes.forEach(fix => priorities[fix.priority].push(fix));
-
-        const labels = {
-            critical: 'Priority 1 — Critical (Fix Immediately)',
-            high: 'Priority 2 — High (Fix This Week)',
-            medium: 'Priority 3 — Medium (Within 30 Days)'
+        const priorityLabels = {
+            critical: 'Critical',
+            high: 'High',
+            medium: 'Medium'
         };
 
         let html = '';
-        for (const [priority, items] of Object.entries(priorities)) {
-            if (items.length === 0) continue;
-            html += `<div class="priority-section priority-${priority}">`;
-            html += `<div class="priority-header"><span class="priority-badge">${priority}</span><h2>${labels[priority]}</h2></div>`;
-            items.forEach(fix => {
-                const isCompleted = completed[fix.id] || false;
-                html += `
-                <div class="fix-card ${isCompleted ? 'completed' : ''}" data-id="${fix.id}">
-                    <div class="fix-header">
-                        <div class="fix-checkbox ${isCompleted ? 'checked' : ''}" data-id="${fix.id}"></div>
-                        <span class="fix-title">${fix.title}</span>
-                        <span class="fix-impact">${fix.impact}</span>
-                        <span class="week-label">Week ${fix.week}</span>
-                        <span class="fix-expand">&#9662;</span>
-                    </div>
-                    <div class="fix-details">
-                        <h4>Root Cause</h4>
-                        <p>${fix.root_cause}</p>
-                        <h4>How to Fix</h4>
-                        ${fix.fix}
-                        <h4>Affected</h4>
-                        <div class="affected-pages">${fix.affected}</div>
-                    </div>
-                </div>`;
-            });
+        phases.forEach(phase => {
+            html += `<div class="phase-section">`;
+            html += `<div class="phase-header"><span class="phase-badge">${phase.badge}</span><h2>${phase.title}</h2></div>`;
+            html += `<div class="phase-subtitle">${phase.subtitle}</div>`;
+
+            if (phase.callout) {
+                html += `<div class="info-card">${phase.callout}</div>`;
+            }
+
+            // Group by priority
+            const groups = { critical: [], high: [], medium: [] };
+            phase.fixes.forEach(f => groups[f.priority].push(f));
+
+            for (const [priority, items] of Object.entries(groups)) {
+                if (items.length === 0) continue;
+                html += `<div class="priority-section priority-${priority}">`;
+                html += `<div class="priority-header"><span class="priority-badge">${priorityLabels[priority]}</span><h3>${items.length} ${items.length === 1 ? 'item' : 'items'}</h3></div>`;
+
+                items.forEach(fix => {
+                    const done = completed[fix.id] || false;
+                    const note = notes[fix.id] || '';
+                    const hasNote = note.trim().length > 0;
+                    html += `
+                    <div class="fix-card ${done ? 'completed' : ''}" data-id="${fix.id}">
+                        <div class="fix-header">
+                            <div class="fix-checkbox ${done ? 'checked' : ''}" data-id="${fix.id}"></div>
+                            <span class="fix-title">${fix.title}</span>
+                            <span class="fix-impact">${fix.impact}</span>
+                            <span class="fix-expand">&#9662;</span>
+                        </div>
+                        <div class="fix-details">
+                            <h4>What's Wrong</h4>
+                            <p>${fix.description}</p>
+                            <h4>How to Fix</h4>
+                            ${fix.fix}
+                            <h4>Affected Pages</h4>
+                            <div class="affected-pages">${fix.affected.replace(/\n/g, '<br>')}</div>
+                            <div class="notes-section">
+                                <h4><span class="note-indicator ${hasNote ? 'has-note' : ''}" data-id="${fix.id}"></span> Notes / Blockers</h4>
+                                <textarea class="notes-textarea" data-id="${fix.id}" placeholder="Stuck? Note what's blocking you here...">${note}</textarea>
+                                <div class="note-saved" data-saved="${fix.id}">Saved</div>
+                            </div>
+                        </div>
+                    </div>`;
+                });
+                html += `</div>`;
+            }
             html += `</div>`;
-        }
+        });
+
         container.innerHTML = html;
         updateProgress();
     }
 
+    // Checkbox + expand
     document.addEventListener('click', (e) => {
         const checkbox = e.target.closest('.fix-checkbox');
         if (checkbox) {
@@ -424,12 +628,37 @@
             updateProgress();
             return;
         }
-
         const header = e.target.closest('.fix-header');
         if (header && !e.target.closest('.fix-checkbox')) {
             header.closest('.fix-card').classList.toggle('open');
         }
     });
+
+    // Notes auto-save
+    let saveTimeout = {};
+    document.addEventListener('input', (e) => {
+        if (e.target.classList.contains('notes-textarea')) {
+            const id = e.target.dataset.id;
+            const notes = getNotes();
+            notes[id] = e.target.value;
+            const indicator = document.querySelector(`.note-indicator[data-id="${id}"]`);
+            if (indicator) indicator.classList.toggle('has-note', e.target.value.trim().length > 0);
+            clearTimeout(saveTimeout[id]);
+            saveTimeout[id] = setTimeout(() => {
+                saveNotes(notes);
+                const saved = document.querySelector(`[data-saved="${id}"]`);
+                if (saved) {
+                    saved.classList.add('visible');
+                    setTimeout(() => saved.classList.remove('visible'), 1500);
+                }
+            }, 500);
+        }
+    });
+
+    // Prevent expand/collapse when clicking inside textarea
+    document.addEventListener('click', (e) => {
+        if (e.target.classList.contains('notes-textarea')) e.stopPropagation();
+    }, true);
 
     renderFixes();
     </script>
