@@ -302,6 +302,7 @@
                 {
                     id: 'cf-email',
                     priority: 'critical',
+                    done: true,
                     title: 'Fix Cloudflare email obfuscation broken links',
                     impact: '40+ pages',
                     description: 'Cloudflare\'s Email Address Obfuscation feature generates crawlable links to <code>/cdn-cgi/l/email-protection</code> that return 404. This is the single largest source of broken internal links on the site.',
@@ -311,6 +312,7 @@
                 {
                     id: 'schedule-redirect',
                     priority: 'critical',
+                    done: true,
                     title: 'Redirect /schedule-consultation/ to /schedule-a-consultation/',
                     impact: '20+ blog posts',
                     description: 'Blog posts use <code>/schedule-consultation/</code> as the CTA link, but the actual page lives at <code>/schedule-a-consultation/</code>. Every blog post\'s CTA is broken.',
@@ -329,6 +331,7 @@
                 {
                     id: 'november-redirect',
                     priority: 'high',
+                    done: true,
                     title: 'Redirect /trademark-update-for-november-30-2025/',
                     impact: '2 pages',
                     description: 'About Us and Services/Third-Party Asset Management pages link to <code>/trademark-update-for-november-30-2025/</code> which doesn\'t exist. The correct URL is <code>/blog/trademark-update-november-30-2025/</code>.',
@@ -446,6 +449,7 @@
                 {
                     id: 'footer-cleanup',
                     priority: 'high',
+                    done: true,
                     title: 'Standardize footer + remove /careers/ link',
                     impact: 'All pages',
                     description: 'Footer varies across pages and links to /careers/ (404 — page in design, not yet built).',
@@ -490,6 +494,7 @@
                 {
                     id: 'meta-home',
                     priority: 'high',
+                    done: true,
                     title: 'Home',
                     impact: '/',
                     description: 'No meta title or description set. Google is auto-generating the snippet.',
@@ -517,6 +522,7 @@
                 {
                     id: 'meta-who-we-serve',
                     priority: 'high',
+                    done: true,
                     title: 'Who We Serve',
                     impact: '/who-we-serve',
                     description: 'No meta title or description set.',
@@ -526,6 +532,7 @@
                 {
                     id: 'meta-for-professionals',
                     priority: 'high',
+                    done: true,
                     title: 'For Professionals',
                     impact: '/who-we-serve/for-professionals',
                     description: 'No meta title or description set.',
@@ -535,6 +542,7 @@
                 {
                     id: 'meta-for-clients',
                     priority: 'high',
+                    done: true,
                     title: 'For Clients',
                     impact: '/who-we-serve/for-clients',
                     description: 'No meta title or description set.',
@@ -544,6 +552,7 @@
                 {
                     id: 'meta-services',
                     priority: 'high',
+                    done: true,
                     title: 'Services Overview',
                     impact: '/services',
                     description: 'No meta title or description set.',
@@ -553,6 +562,7 @@
                 {
                     id: 'meta-tpam',
                     priority: 'high',
+                    done: true,
                     title: 'Third-Party Asset Management',
                     impact: '/services/third-party-asset-management',
                     description: 'No meta title or description set.',
@@ -571,6 +581,7 @@
                 {
                     id: 'meta-consulting',
                     priority: 'high',
+                    done: true,
                     title: 'Investment Consulting',
                     impact: '/services/investment-consulting',
                     description: 'No meta title or description set.',
@@ -580,6 +591,7 @@
                 {
                     id: 'meta-insights',
                     priority: 'high',
+                    done: true,
                     title: 'Insights',
                     impact: '/insights',
                     description: 'No meta title or description set.',
@@ -589,6 +601,7 @@
                 {
                     id: 'meta-contact',
                     priority: 'high',
+                    done: true,
                     title: 'Contact',
                     impact: '/contact',
                     description: 'No meta title or description set.',
@@ -598,6 +611,7 @@
                 {
                     id: 'meta-consultation',
                     priority: 'high',
+                    done: true,
                     title: 'Schedule a Consultation',
                     impact: '/consultation',
                     description: 'No meta title or description set. Note: master sheet URL is /consultation but live site uses /schedule-a-consultation.',
@@ -634,6 +648,7 @@
                 {
                     id: 'meta-privacy',
                     priority: 'medium',
+                    done: true,
                     title: 'Privacy Policy',
                     impact: '/privacy-policy',
                     description: 'No meta title or description set.',
@@ -652,6 +667,7 @@
                 {
                     id: 'meta-disclaimer',
                     priority: 'medium',
+                    done: true,
                     title: 'General Disclaimer',
                     impact: '/disclaimer',
                     description: 'No meta title or description set.',
@@ -661,6 +677,7 @@
                 {
                     id: 'meta-continuity',
                     priority: 'medium',
+                    done: true,
                     title: 'Business Continuity',
                     impact: '/business-continuity',
                     description: 'No meta title or description set.',
@@ -747,6 +764,19 @@
                 localStorage.removeItem('trademark-internal-links');
             }
         } catch {}
+    })();
+
+    // Pre-populate localStorage with items marked done in the data
+    (function seedDoneFlags() {
+        const completed = getCompleted();
+        let changed = false;
+        phases.forEach(p => p.fixes.forEach(f => {
+            if (f.done && !completed[f.id]) {
+                completed[f.id] = true;
+                changed = true;
+            }
+        }));
+        if (changed) saveCompleted(completed);
     })();
 
     function getAllFixes() {
