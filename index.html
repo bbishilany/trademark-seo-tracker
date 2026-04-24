@@ -215,73 +215,99 @@
             line-height: 1.5;
         }
 
-        /* ── Notes / Blockers ── */
-        .notes-section { margin-top: 1rem; }
-        .notes-section h4 {
+        /* ── Comments ── */
+        .comments-section { margin-top: 1rem; }
+        .comments-section h4 { margin-bottom: 0.5rem; }
+        .comments-list { margin-bottom: 0.5rem; }
+        .comment {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #f1f5f9;
+            font-size: 0.85rem;
+        }
+        .comment:last-child { border-bottom: none; }
+        .comment-meta {
+            font-size: 0.75rem;
+            color: #94a3b8;
+            margin-bottom: 0.15rem;
+        }
+        .comment-author { font-weight: 600; color: #334155; }
+        .comment-body { color: #475569; line-height: 1.5; }
+        .comment-form {
             display: flex;
-            align-items: center;
-            gap: 0.4rem;
+            gap: 0.5rem;
+            align-items: flex-start;
         }
-        .note-indicator {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: transparent;
-            transition: background 0.2s;
-        }
-        .note-indicator.has-note { background: #f59e0b; }
-        .notes-textarea {
-            width: 100%;
-            min-height: 60px;
-            margin-top: 0.4rem;
-            padding: 0.6rem 0.75rem;
+        .comment-input {
+            flex: 1;
+            padding: 0.5rem 0.75rem;
             border: 1px solid #e2e8f0;
             border-radius: 6px;
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             font-size: 0.85rem;
             color: #334155;
-            line-height: 1.5;
-            resize: vertical;
-            transition: border-color 0.2s;
             background: #fff;
+            resize: none;
+            min-height: 38px;
+            line-height: 1.5;
         }
-        .notes-textarea:focus {
+        .comment-input:focus {
             outline: none;
             border-color: #3b82f6;
             box-shadow: 0 0 0 3px rgba(59,130,246,0.1);
         }
-        .notes-textarea::placeholder { color: #94a3b8; }
-        .notes-actions {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            margin-top: 0.5rem;
-        }
-        .btn-flag-blocked {
+        .comment-input::placeholder { color: #94a3b8; }
+        .btn-send {
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            border: none;
+            background: #0f172a;
+            color: white;
             font-size: 0.8rem;
             font-weight: 600;
-            padding: 0.4rem 0.85rem;
-            border-radius: 6px;
-            border: 1px solid #fca5a5;
-            background: #fef2f2;
-            color: #dc2626;
             cursor: pointer;
-            transition: all 0.2s;
+            white-space: nowrap;
+            transition: background 0.2s;
         }
-        .btn-flag-blocked:hover { background: #fee2e2; }
-        .btn-flag-blocked.is-blocked {
-            background: #dc2626;
-            border-color: #dc2626;
+        .btn-send:hover { background: #1e293b; }
+        .btn-send:disabled { opacity: 0.4; cursor: default; }
+        /* ── Name Prompt ── */
+        .name-overlay {
+            position: fixed; inset: 0;
+            background: rgba(15,23,42,0.5);
+            display: flex; align-items: center; justify-content: center;
+            z-index: 1000;
+        }
+        .name-dialog {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            max-width: 340px;
+            width: 90%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+        }
+        .name-dialog h2 { font-size: 1.1rem; margin-bottom: 0.5rem; }
+        .name-dialog p { font-size: 0.85rem; color: #64748b; margin-bottom: 1rem; }
+        .name-dialog input {
+            width: 100%;
+            padding: 0.6rem 0.75rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            font-size: 0.95rem;
+            margin-bottom: 0.75rem;
+        }
+        .name-dialog input:focus { outline: none; border-color: #3b82f6; }
+        .name-dialog button {
+            width: 100%;
+            padding: 0.6rem;
+            background: #0f172a;
             color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
         }
-        .btn-flag-blocked.is-blocked:hover { background: #b91c1c; }
-        .note-saved {
-            font-size: 0.75rem;
-            color: #059669;
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-        .note-saved.visible { opacity: 1; }
+        .name-dialog button:hover { background: #1e293b; }
 
         /* ── Info Callout ── */
         .info-card {
@@ -767,24 +793,42 @@
 
     // ── State ──
     let completedState = {};
-    let notesState = {};
-    let blockedState = {};
+    let commentsState = {};  // { fixId: [{ author, body, created_at }] }
+    let currentUser = localStorage.getItem('seo-tracker-user') || '';
 
     // ── localStorage (write-through cache + offline fallback) ──
     const STORAGE_KEY = 'trademark-seo-fixes';
-    const NOTES_KEY = 'trademark-seo-notes';
 
     function cacheCompleted() {
         try { localStorage.setItem(STORAGE_KEY, JSON.stringify(completedState)); } catch {}
     }
-    function cacheNotes() {
-        try { localStorage.setItem(NOTES_KEY, JSON.stringify(notesState)); } catch {}
-    }
     function loadCachedCompleted() {
         try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; } catch { return {}; }
     }
-    function loadCachedNotes() {
-        try { return JSON.parse(localStorage.getItem(NOTES_KEY)) || {}; } catch { return {}; }
+
+    // ── Name prompt ──
+    function ensureUser() {
+        if (currentUser) return;
+        const overlay = document.createElement('div');
+        overlay.className = 'name-overlay';
+        overlay.innerHTML = `<div class="name-dialog">
+            <h2>Welcome to the SEO Tracker</h2>
+            <p>Enter your name so comments are attributed to you.</p>
+            <input type="text" id="nameInput" placeholder="Your first name" autofocus>
+            <button id="nameSubmit">Continue</button>
+        </div>`;
+        document.body.appendChild(overlay);
+        const input = document.getElementById('nameInput');
+        const submit = document.getElementById('nameSubmit');
+        function saveName() {
+            const name = input.value.trim();
+            if (!name) return;
+            currentUser = name;
+            localStorage.setItem('seo-tracker-user', name);
+            overlay.remove();
+        }
+        submit.addEventListener('click', saveName);
+        input.addEventListener('keydown', (e) => { if (e.key === 'Enter') saveName(); });
     }
 
     function getAllFixes() {
@@ -820,16 +864,14 @@
 
                 items.forEach(fix => {
                     const done = completedState[fix.id] || false;
-                    const note = notesState[fix.id] || '';
-                    const isBlocked = blockedState[fix.id] || false;
-                    const flagClass = isBlocked ? 'visible blocked' : '';
-                    const flagText = isBlocked ? 'blocked' : '';
+                    const comments = commentsState[fix.id] || [];
+                    const hasComments = comments.length > 0;
                     html += `
                     <div class="fix-card ${done ? 'completed' : ''}" data-id="${fix.id}">
                         <div class="fix-header">
                             <div class="fix-checkbox ${done ? 'checked' : ''}" data-id="${fix.id}"></div>
                             <span class="fix-title">${fix.title}</span>
-                            <span class="fix-note-flag ${flagClass}" data-flag="${fix.id}">${flagText}</span>
+                            <span class="fix-note-flag ${hasComments ? 'visible' : ''}" data-flag="${fix.id}">${hasComments ? comments.length : ''}</span>
                             <span class="fix-impact">${fix.impact}</span>
                             <span class="fix-expand">&#9662;</span>
                         </div>
@@ -840,12 +882,12 @@
                             ${fix.fix}
                             <h4>Affected Pages</h4>
                             <div class="affected-pages">${fix.affected.replace(/\n/g, '<br>')}</div>
-                            <div class="notes-section">
-                                <h4>Notes / Blockers</h4>
-                                <textarea class="notes-textarea" data-id="${fix.id}" placeholder="Describe what's blocking you...">${note}</textarea>
-                                <div class="notes-actions">
-                                    <button class="btn-flag-blocked ${isBlocked ? 'is-blocked' : ''}" data-id="${fix.id}">${isBlocked ? 'Unblock' : 'Flag Blocked'}</button>
-                                    <span class="note-saved" data-saved="${fix.id}">Saved</span>
+                            <div class="comments-section">
+                                <h4>Comments</h4>
+                                <div class="comments-list" data-comments="${fix.id}">${renderComments(comments)}</div>
+                                <div class="comment-form">
+                                    <input type="text" class="comment-input" data-id="${fix.id}" placeholder="Leave a comment...">
+                                    <button class="btn-send" data-id="${fix.id}">Send</button>
                                 </div>
                             </div>
                         </div>
@@ -860,29 +902,31 @@
         updateProgress();
     }
 
+    // ── Render comment list HTML ──
+    function renderComments(comments) {
+        if (!comments || comments.length === 0) return '';
+        return comments.map(c => {
+            const time = new Date(c.created_at).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' });
+            return `<div class="comment"><div class="comment-meta"><span class="comment-author">${c.author}</span> &middot; ${time}</div><div class="comment-body">${c.body}</div></div>`;
+        }).join('');
+    }
+
     // ── Update a single card without full re-render ──
     function updateCard(id) {
         const card = document.querySelector(`.fix-card[data-id="${id}"]`);
         if (!card) return;
         const done = completedState[id] || false;
-        const note = notesState[id] || '';
-        const isBlocked = blockedState[id] || false;
+        const comments = commentsState[id] || [];
         card.classList.toggle('completed', done);
         const cb = card.querySelector('.fix-checkbox');
         if (cb) cb.classList.toggle('checked', done);
-        const textarea = card.querySelector('.notes-textarea');
-        if (textarea && textarea !== document.activeElement) textarea.value = note;
         const flag = card.querySelector('.fix-note-flag');
         if (flag) {
-            flag.classList.toggle('visible', isBlocked);
-            flag.classList.toggle('blocked', isBlocked);
-            flag.textContent = isBlocked ? 'blocked' : '';
+            flag.classList.toggle('visible', comments.length > 0);
+            flag.textContent = comments.length > 0 ? comments.length : '';
         }
-        const btn = card.querySelector('.btn-flag-blocked');
-        if (btn) {
-            btn.classList.toggle('is-blocked', isBlocked);
-            btn.textContent = isBlocked ? 'Unblock' : 'Flag Blocked';
-        }
+        const list = card.querySelector('.comments-list');
+        if (list) list.innerHTML = renderComments(comments);
         updateProgress();
     }
 
@@ -909,7 +953,6 @@
         if (error) {
             console.warn('Supabase load failed, using localStorage cache:', error);
             completedState = loadCachedCompleted();
-            notesState = loadCachedNotes();
             renderFixes();
             return;
         }
@@ -917,32 +960,59 @@
         (data || []).forEach(row => {
             existingIds.add(row.id);
             completedState[row.id] = row.completed;
-            notesState[row.id] = row.note || '';
-            blockedState[row.id] = row.blocked || false;
         });
         await seedDoneFlags(existingIds);
         cacheCompleted();
-        cacheNotes();
+
+        // Load comments
+        const { data: comments, error: cErr } = await sb.from('seo_comments').select('*').order('created_at', { ascending: true });
+        if (!cErr && comments) {
+            comments.forEach(c => {
+                if (!commentsState[c.fix_id]) commentsState[c.fix_id] = [];
+                commentsState[c.fix_id].push(c);
+            });
+        }
+
         renderFixes();
     }
 
-    // ── Supabase: real-time subscription ──
+    // ── Supabase: real-time subscriptions ──
     function subscribeRealtime() {
         sb.channel('seo-tracker-sync')
             .on('postgres_changes', { event: '*', schema: 'public', table: 'seo_tracker' }, (payload) => {
                 const row = payload.new;
                 if (!row || !row.id) return;
                 completedState[row.id] = row.completed;
-                notesState[row.id] = row.note || '';
-                blockedState[row.id] = row.blocked || false;
                 cacheCompleted();
-                cacheNotes();
                 updateCard(row.id);
+            })
+            .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'seo_comments' }, (payload) => {
+                const c = payload.new;
+                if (!c || !c.fix_id) return;
+                if (!commentsState[c.fix_id]) commentsState[c.fix_id] = [];
+                // Avoid duplicates (from own insert)
+                if (!commentsState[c.fix_id].some(x => x.id === c.id)) {
+                    commentsState[c.fix_id].push(c);
+                    updateCard(c.fix_id);
+                }
             })
             .subscribe();
     }
 
-    // ── Event: checkbox toggle + blocked button ──
+    // ── Post a comment ──
+    async function postComment(fixId, body) {
+        if (!body.trim() || !currentUser) return;
+        const comment = { fix_id: fixId, author: currentUser, body: body.trim() };
+        const { data, error } = await sb.from('seo_comments').insert(comment).select();
+        if (error) { console.error('Comment error:', error); return; }
+        if (data && data[0]) {
+            if (!commentsState[fixId]) commentsState[fixId] = [];
+            commentsState[fixId].push(data[0]);
+            updateCard(fixId);
+        }
+    }
+
+    // ── Event: checkbox toggle ──
     document.addEventListener('click', (e) => {
         const checkbox = e.target.closest('.fix-checkbox');
         if (checkbox) {
@@ -951,16 +1021,18 @@
             completedState[id] = !completedState[id];
             cacheCompleted();
             updateCard(id);
-            upsertRow(id, { completed: completedState[id], note: notesState[id] || '', blocked: blockedState[id] || false });
+            upsertRow(id, { completed: completedState[id] });
             return;
         }
-        const blockBtn = e.target.closest('.btn-flag-blocked');
-        if (blockBtn) {
+        const sendBtn = e.target.closest('.btn-send');
+        if (sendBtn) {
             e.stopPropagation();
-            const id = blockBtn.dataset.id;
-            blockedState[id] = !blockedState[id];
-            updateCard(id);
-            upsertRow(id, { completed: completedState[id] || false, note: notesState[id] || '', blocked: blockedState[id] });
+            const id = sendBtn.dataset.id;
+            const input = document.querySelector(`.comment-input[data-id="${id}"]`);
+            if (input && input.value.trim()) {
+                postComment(id, input.value);
+                input.value = '';
+            }
             return;
         }
         const header = e.target.closest('.fix-header');
@@ -969,31 +1041,25 @@
         }
     });
 
-    // ── Event: notes auto-save (debounced) ──
-    let saveTimeout = {};
-    document.addEventListener('input', (e) => {
-        if (e.target.classList.contains('notes-textarea')) {
+    // ── Enter key sends comment ──
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' && e.target.classList.contains('comment-input')) {
+            e.preventDefault();
             const id = e.target.dataset.id;
-            notesState[id] = e.target.value;
-            clearTimeout(saveTimeout[id]);
-            saveTimeout[id] = setTimeout(() => {
-                cacheNotes();
-                upsertRow(id, { completed: completedState[id] || false, note: notesState[id], blocked: blockedState[id] || false });
-                const saved = document.querySelector(`[data-saved="${id}"]`);
-                if (saved) {
-                    saved.classList.add('visible');
-                    setTimeout(() => saved.classList.remove('visible'), 1500);
-                }
-            }, 500);
+            if (e.target.value.trim()) {
+                postComment(id, e.target.value);
+                e.target.value = '';
+            }
         }
     });
 
-    // Prevent expand/collapse when clicking inside textarea
+    // Prevent expand/collapse when clicking inside comment input
     document.addEventListener('click', (e) => {
-        if (e.target.classList.contains('notes-textarea')) e.stopPropagation();
+        if (e.target.classList.contains('comment-input')) e.stopPropagation();
     }, true);
 
     // ── Init ──
+    ensureUser();
     loadFromSupabase();
     subscribeRealtime();
     </script>
