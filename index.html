@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Trademark Financial — SEO Fix Tracker</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -287,11 +288,16 @@
         <div id="fixList"></div>
 
         <footer>
-            Mileage Intelligence &bull; SEO Fix Tracker &bull; Data persists in your browser (localStorage)
+            Mileage Intelligence &bull; SEO Fix Tracker &bull; Real-time sync enabled
         </footer>
     </div>
 
     <script>
+    // ── Supabase Config ──
+    const SUPABASE_URL = 'https://byuxmsohwsvnqfirgeit.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ5dXhtc29od3N2bnFmaXJnZWl0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ0MDE3NzYsImV4cCI6MjA4OTk3Nzc3Nn0.YctPyGRzwgdz9-HaHDnWO0KhrVhElRhYKg7feIWPd1c';
+    const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
     const phases = [
         {
             id: 'phase1',
@@ -724,69 +730,34 @@
         }
     ];
 
-    // Unified storage — preserves any existing Phase 1 data
+    // ── State ──
+    let completedState = {};
+    let notesState = {};
+
+    // ── localStorage (write-through cache + offline fallback) ──
     const STORAGE_KEY = 'trademark-seo-fixes';
     const NOTES_KEY = 'trademark-seo-notes';
 
-    function getCompleted() {
-        try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; }
-        catch { return {}; }
+    function cacheCompleted() {
+        try { localStorage.setItem(STORAGE_KEY, JSON.stringify(completedState)); } catch {}
     }
-    function saveCompleted(data) {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    function cacheNotes() {
+        try { localStorage.setItem(NOTES_KEY, JSON.stringify(notesState)); } catch {}
     }
-    function getNotes() {
-        try { return JSON.parse(localStorage.getItem(NOTES_KEY)) || {}; }
-        catch { return {}; }
+    function loadCachedCompleted() {
+        try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; } catch { return {}; }
     }
-    function saveNotes(data) {
-        localStorage.setItem(NOTES_KEY, JSON.stringify(data));
+    function loadCachedNotes() {
+        try { return JSON.parse(localStorage.getItem(NOTES_KEY)) || {}; } catch { return {}; }
     }
-
-    // Migrate notes from old internal-links key if present
-    (function migrateNotes() {
-        try {
-            const old = JSON.parse(localStorage.getItem('trademark-internal-links-notes'));
-            if (old && Object.keys(old).length > 0) {
-                const current = getNotes();
-                Object.assign(current, old);
-                saveNotes(current);
-                localStorage.removeItem('trademark-internal-links-notes');
-            }
-        } catch {}
-        // Also merge any old internal-links checkbox data
-        try {
-            const old = JSON.parse(localStorage.getItem('trademark-internal-links'));
-            if (old && Object.keys(old).length > 0) {
-                const current = getCompleted();
-                Object.assign(current, old);
-                saveCompleted(current);
-                localStorage.removeItem('trademark-internal-links');
-            }
-        } catch {}
-    })();
-
-    // Pre-populate localStorage with items marked done in the data
-    (function seedDoneFlags() {
-        const completed = getCompleted();
-        let changed = false;
-        phases.forEach(p => p.fixes.forEach(f => {
-            if (f.done && !completed[f.id]) {
-                completed[f.id] = true;
-                changed = true;
-            }
-        }));
-        if (changed) saveCompleted(completed);
-    })();
 
     function getAllFixes() {
         return phases.flatMap(p => p.fixes);
     }
 
     function updateProgress() {
-        const completed = getCompleted();
         const all = getAllFixes();
-        const done = all.filter(f => completed[f.id]).length;
+        const done = all.filter(f => completedState[f.id]).length;
         document.getElementById('progressCount').textContent = done;
         document.getElementById('totalCount').textContent = all.length;
         document.getElementById('progressFill').style.width = `${(done / all.length) * 100}%`;
@@ -794,26 +765,15 @@
 
     function renderFixes() {
         const container = document.getElementById('fixList');
-        const completed = getCompleted();
-        const notes = getNotes();
-
-        const priorityLabels = {
-            critical: 'Critical',
-            high: 'High',
-            medium: 'Medium'
-        };
+        const priorityLabels = { critical: 'Critical', high: 'High', medium: 'Medium' };
 
         let html = '';
         phases.forEach(phase => {
             html += `<div class="phase-section">`;
             html += `<div class="phase-header"><span class="phase-badge">${phase.badge}</span><h2>${phase.title}</h2></div>`;
             html += `<div class="phase-subtitle">${phase.subtitle}</div>`;
+            if (phase.callout) html += `<div class="info-card">${phase.callout}</div>`;
 
-            if (phase.callout) {
-                html += `<div class="info-card">${phase.callout}</div>`;
-            }
-
-            // Group by priority
             const groups = { critical: [], high: [], medium: [] };
             phase.fixes.forEach(f => groups[f.priority].push(f));
 
@@ -823,8 +783,8 @@
                 html += `<div class="priority-header"><span class="priority-badge">${priorityLabels[priority]}</span><h3>${items.length} ${items.length === 1 ? 'item' : 'items'}</h3></div>`;
 
                 items.forEach(fix => {
-                    const done = completed[fix.id] || false;
-                    const note = notes[fix.id] || '';
+                    const done = completedState[fix.id] || false;
+                    const note = notesState[fix.id] || '';
                     const hasNote = note.trim().length > 0;
                     html += `
                     <div class="fix-card ${done ? 'completed' : ''}" data-id="${fix.id}">
@@ -858,19 +818,86 @@
         updateProgress();
     }
 
-    // Checkbox + expand
+    // ── Update a single card without full re-render ──
+    function updateCard(id) {
+        const card = document.querySelector(`.fix-card[data-id="${id}"]`);
+        if (!card) return;
+        const done = completedState[id] || false;
+        const note = notesState[id] || '';
+        card.classList.toggle('completed', done);
+        const cb = card.querySelector('.fix-checkbox');
+        if (cb) cb.classList.toggle('checked', done);
+        const textarea = card.querySelector('.notes-textarea');
+        if (textarea && textarea !== document.activeElement) textarea.value = note;
+        const indicator = card.querySelector('.note-indicator');
+        if (indicator) indicator.classList.toggle('has-note', note.trim().length > 0);
+        updateProgress();
+    }
+
+    // ── Supabase: upsert a row ──
+    async function upsertRow(id, fields) {
+        const row = { id, ...fields, updated_at: new Date().toISOString() };
+        const { error } = await sb.from('seo_tracker').upsert(row);
+        if (error) console.error('Supabase upsert error:', error);
+    }
+
+    // ── Supabase: seed done flags ──
+    async function seedDoneFlags(existingIds) {
+        const toSeed = getAllFixes().filter(f => f.done && !existingIds.has(f.id));
+        if (toSeed.length === 0) return;
+        const rows = toSeed.map(f => ({ id: f.id, completed: true, note: '', updated_at: new Date().toISOString() }));
+        const { error } = await sb.from('seo_tracker').upsert(rows);
+        if (error) console.error('Seed error:', error);
+        toSeed.forEach(f => { completedState[f.id] = true; });
+    }
+
+    // ── Supabase: load initial state ──
+    async function loadFromSupabase() {
+        const { data, error } = await sb.from('seo_tracker').select('*');
+        if (error) {
+            console.warn('Supabase load failed, using localStorage cache:', error);
+            completedState = loadCachedCompleted();
+            notesState = loadCachedNotes();
+            renderFixes();
+            return;
+        }
+        const existingIds = new Set();
+        (data || []).forEach(row => {
+            existingIds.add(row.id);
+            completedState[row.id] = row.completed;
+            notesState[row.id] = row.note || '';
+        });
+        await seedDoneFlags(existingIds);
+        cacheCompleted();
+        cacheNotes();
+        renderFixes();
+    }
+
+    // ── Supabase: real-time subscription ──
+    function subscribeRealtime() {
+        sb.channel('seo-tracker-sync')
+            .on('postgres_changes', { event: '*', schema: 'public', table: 'seo_tracker' }, (payload) => {
+                const row = payload.new;
+                if (!row || !row.id) return;
+                completedState[row.id] = row.completed;
+                notesState[row.id] = row.note || '';
+                cacheCompleted();
+                cacheNotes();
+                updateCard(row.id);
+            })
+            .subscribe();
+    }
+
+    // ── Event: checkbox toggle ──
     document.addEventListener('click', (e) => {
         const checkbox = e.target.closest('.fix-checkbox');
         if (checkbox) {
             e.stopPropagation();
             const id = checkbox.dataset.id;
-            const completed = getCompleted();
-            completed[id] = !completed[id];
-            saveCompleted(completed);
-            const card = checkbox.closest('.fix-card');
-            card.classList.toggle('completed', completed[id]);
-            checkbox.classList.toggle('checked', completed[id]);
-            updateProgress();
+            completedState[id] = !completedState[id];
+            cacheCompleted();
+            updateCard(id);
+            upsertRow(id, { completed: completedState[id], note: notesState[id] || '' });
             return;
         }
         const header = e.target.closest('.fix-header');
@@ -879,18 +906,18 @@
         }
     });
 
-    // Notes auto-save
+    // ── Event: notes auto-save (debounced) ──
     let saveTimeout = {};
     document.addEventListener('input', (e) => {
         if (e.target.classList.contains('notes-textarea')) {
             const id = e.target.dataset.id;
-            const notes = getNotes();
-            notes[id] = e.target.value;
+            notesState[id] = e.target.value;
             const indicator = document.querySelector(`.note-indicator[data-id="${id}"]`);
             if (indicator) indicator.classList.toggle('has-note', e.target.value.trim().length > 0);
             clearTimeout(saveTimeout[id]);
             saveTimeout[id] = setTimeout(() => {
-                saveNotes(notes);
+                cacheNotes();
+                upsertRow(id, { completed: completedState[id] || false, note: notesState[id] });
                 const saved = document.querySelector(`[data-saved="${id}"]`);
                 if (saved) {
                     saved.classList.add('visible');
@@ -905,7 +932,9 @@
         if (e.target.classList.contains('notes-textarea')) e.stopPropagation();
     }, true);
 
-    renderFixes();
+    // ── Init ──
+    loadFromSupabase();
+    subscribeRealtime();
     </script>
 </body>
 </html>
