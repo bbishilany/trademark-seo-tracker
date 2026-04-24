@@ -155,6 +155,7 @@
             display: none;
         }
         .fix-note-flag.visible { display: inline-block; }
+        .fix-note-flag.blocked { background: #fee2e2; color: #dc2626; }
         .fix-impact {
             font-size: 0.75rem;
             padding: 0.15rem 0.5rem;
@@ -250,10 +251,33 @@
             box-shadow: 0 0 0 3px rgba(59,130,246,0.1);
         }
         .notes-textarea::placeholder { color: #94a3b8; }
+        .notes-actions {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-top: 0.5rem;
+        }
+        .btn-flag-blocked {
+            font-size: 0.8rem;
+            font-weight: 600;
+            padding: 0.4rem 0.85rem;
+            border-radius: 6px;
+            border: 1px solid #fca5a5;
+            background: #fef2f2;
+            color: #dc2626;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-flag-blocked:hover { background: #fee2e2; }
+        .btn-flag-blocked.is-blocked {
+            background: #dc2626;
+            border-color: #dc2626;
+            color: white;
+        }
+        .btn-flag-blocked.is-blocked:hover { background: #b91c1c; }
         .note-saved {
             font-size: 0.75rem;
             color: #059669;
-            margin-top: 0.3rem;
             opacity: 0;
             transition: opacity 0.3s;
         }
@@ -744,6 +768,7 @@
     // ── State ──
     let completedState = {};
     let notesState = {};
+    let blockedState = {};
 
     // ── localStorage (write-through cache + offline fallback) ──
     const STORAGE_KEY = 'trademark-seo-fixes';
@@ -796,13 +821,15 @@
                 items.forEach(fix => {
                     const done = completedState[fix.id] || false;
                     const note = notesState[fix.id] || '';
-                    const hasNote = note.trim().length > 0;
+                    const isBlocked = blockedState[fix.id] || false;
+                    const flagClass = isBlocked ? 'visible blocked' : '';
+                    const flagText = isBlocked ? 'blocked' : '';
                     html += `
                     <div class="fix-card ${done ? 'completed' : ''}" data-id="${fix.id}">
                         <div class="fix-header">
                             <div class="fix-checkbox ${done ? 'checked' : ''}" data-id="${fix.id}"></div>
                             <span class="fix-title">${fix.title}</span>
-                            <span class="fix-note-flag ${hasNote ? 'visible' : ''}" data-flag="${fix.id}">has note</span>
+                            <span class="fix-note-flag ${flagClass}" data-flag="${fix.id}">${flagText}</span>
                             <span class="fix-impact">${fix.impact}</span>
                             <span class="fix-expand">&#9662;</span>
                         </div>
@@ -814,9 +841,12 @@
                             <h4>Affected Pages</h4>
                             <div class="affected-pages">${fix.affected.replace(/\n/g, '<br>')}</div>
                             <div class="notes-section">
-                                <h4><span class="note-indicator ${hasNote ? 'has-note' : ''}" data-id="${fix.id}"></span> Notes / Blockers</h4>
-                                <textarea class="notes-textarea" data-id="${fix.id}" placeholder="Stuck? Note what's blocking you here...">${note}</textarea>
-                                <div class="note-saved" data-saved="${fix.id}">Saved</div>
+                                <h4>Notes / Blockers</h4>
+                                <textarea class="notes-textarea" data-id="${fix.id}" placeholder="Describe what's blocking you...">${note}</textarea>
+                                <div class="notes-actions">
+                                    <button class="btn-flag-blocked ${isBlocked ? 'is-blocked' : ''}" data-id="${fix.id}">${isBlocked ? 'Unblock' : 'Flag Blocked'}</button>
+                                    <span class="note-saved" data-saved="${fix.id}">Saved</span>
+                                </div>
                             </div>
                         </div>
                     </div>`;
@@ -836,15 +866,23 @@
         if (!card) return;
         const done = completedState[id] || false;
         const note = notesState[id] || '';
+        const isBlocked = blockedState[id] || false;
         card.classList.toggle('completed', done);
         const cb = card.querySelector('.fix-checkbox');
         if (cb) cb.classList.toggle('checked', done);
         const textarea = card.querySelector('.notes-textarea');
         if (textarea && textarea !== document.activeElement) textarea.value = note;
-        const indicator = card.querySelector('.note-indicator');
-        if (indicator) indicator.classList.toggle('has-note', note.trim().length > 0);
         const flag = card.querySelector('.fix-note-flag');
-        if (flag) flag.classList.toggle('visible', note.trim().length > 0);
+        if (flag) {
+            flag.classList.toggle('visible', isBlocked);
+            flag.classList.toggle('blocked', isBlocked);
+            flag.textContent = isBlocked ? 'blocked' : '';
+        }
+        const btn = card.querySelector('.btn-flag-blocked');
+        if (btn) {
+            btn.classList.toggle('is-blocked', isBlocked);
+            btn.textContent = isBlocked ? 'Unblock' : 'Flag Blocked';
+        }
         updateProgress();
     }
 
@@ -880,6 +918,7 @@
             existingIds.add(row.id);
             completedState[row.id] = row.completed;
             notesState[row.id] = row.note || '';
+            blockedState[row.id] = row.blocked || false;
         });
         await seedDoneFlags(existingIds);
         cacheCompleted();
@@ -895,6 +934,7 @@
                 if (!row || !row.id) return;
                 completedState[row.id] = row.completed;
                 notesState[row.id] = row.note || '';
+                blockedState[row.id] = row.blocked || false;
                 cacheCompleted();
                 cacheNotes();
                 updateCard(row.id);
@@ -902,7 +942,7 @@
             .subscribe();
     }
 
-    // ── Event: checkbox toggle ──
+    // ── Event: checkbox toggle + blocked button ──
     document.addEventListener('click', (e) => {
         const checkbox = e.target.closest('.fix-checkbox');
         if (checkbox) {
@@ -911,7 +951,16 @@
             completedState[id] = !completedState[id];
             cacheCompleted();
             updateCard(id);
-            upsertRow(id, { completed: completedState[id], note: notesState[id] || '' });
+            upsertRow(id, { completed: completedState[id], note: notesState[id] || '', blocked: blockedState[id] || false });
+            return;
+        }
+        const blockBtn = e.target.closest('.btn-flag-blocked');
+        if (blockBtn) {
+            e.stopPropagation();
+            const id = blockBtn.dataset.id;
+            blockedState[id] = !blockedState[id];
+            updateCard(id);
+            upsertRow(id, { completed: completedState[id] || false, note: notesState[id] || '', blocked: blockedState[id] });
             return;
         }
         const header = e.target.closest('.fix-header');
@@ -926,14 +975,10 @@
         if (e.target.classList.contains('notes-textarea')) {
             const id = e.target.dataset.id;
             notesState[id] = e.target.value;
-            const indicator = document.querySelector(`.note-indicator[data-id="${id}"]`);
-            if (indicator) indicator.classList.toggle('has-note', e.target.value.trim().length > 0);
-            const flag = document.querySelector(`.fix-note-flag[data-flag="${id}"]`);
-            if (flag) flag.classList.toggle('visible', e.target.value.trim().length > 0);
             clearTimeout(saveTimeout[id]);
             saveTimeout[id] = setTimeout(() => {
                 cacheNotes();
-                upsertRow(id, { completed: completedState[id] || false, note: notesState[id] });
+                upsertRow(id, { completed: completedState[id] || false, note: notesState[id], blocked: blockedState[id] || false });
                 const saved = document.querySelector(`[data-saved="${id}"]`);
                 if (saved) {
                     saved.classList.add('visible');
