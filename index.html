@@ -468,7 +468,8 @@
                 {
                     id: 'external-broken',
                     priority: 'medium',
-                    receipt: { status: 'not-fixed', text: 'johnmauldin.com still returns 503 (Service Unavailable: Back-end server at capacity). Site appears permanently down. Link should be removed or replaced with Wayback Machine archive.', date: 'Apr 24, 2026' },
+                    done: true,
+                    receipt: { status: 'verified', text: 'Confirmed: the johnmauldin.com hyperlink has been removed from the post. "John Mauldin" now appears as plain text attribution only — no broken outbound link remains. Page HTML verified via curl.', date: 'Apr 24, 2026' },
                     title: 'Fix external broken link (johnmauldin.com)',
                     impact: '1 page',
                     description: 'The blog post "Market Perspective — Mark Carlton, CFA" links to <code>http://www.johnmauldin.com/</code> which returns a 503 error.',
