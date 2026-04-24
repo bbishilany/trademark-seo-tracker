@@ -437,11 +437,12 @@
                 {
                     id: 'robots-txt',
                     priority: 'high',
-                    receipt: { status: 'partial', text: 'Cloudflare-managed robots.txt blocks GPTBot, Amazonbot, and meta-externalagent — killing AI search visibility in ChatGPT (55-60% of AI referral traffic), Amazon, and Meta AI. Content-Signal directive is non-standard but harmless. Fix: Cloudflare Dashboard > Security > Bots > AI Scrapers and Crawlers — allow GPTBot, Amazonbot, meta-externalagent. Keep blocking CCBot, Bytespider, Applebot-Extended (training-only).', date: 'Apr 24, 2026' },
+                    done: true,
+                    receipt: { status: 'verified', text: 'Fixed. Cloudflare managed robots.txt disabled — Content-Signal and all AI bot Disallow directives removed. Per-bot CDN enforcement configured in AI Crawl Control: GPTBot, PerplexityBot, Meta-ExternalAgent, Amazonbot, ClaudeBot, and all AI search crawlers ALLOWED. CCBot, Bytespider, TikTok Spider, PetalBot, Novellum, ProRataInc, Timpibot BLOCKED (training-only). robots.txt now clean — only Yoast sitemap reference remains. Verified via curl.', date: 'Apr 24, 2026' },
                     title: 'Fix malformed robots.txt directive',
                     impact: 'Site-wide crawl',
-                    description: 'Cloudflare is blocking AI search crawlers (GPTBot, Amazonbot, meta-externalagent) via robots.txt. This prevents the site from appearing in ChatGPT search, Meta AI, and Amazon/Alexa results. The <code>Content-Signal: search=yes,ai-train=no</code> directive is non-standard but harmless — the real issue is the bot blocks.',
-                    fix: '<ul><li><strong>Go to Cloudflare Dashboard</strong> > Security > Bots > AI Scrapers and Crawlers</li><li><strong>Allow:</strong> GPTBot (ChatGPT search), Amazonbot (Alexa), meta-externalagent (Meta AI), PerplexityBot</li><li><strong>Keep blocked:</strong> CCBot (Common Crawl training), Bytespider (TikTok training), Applebot-Extended (Apple training)</li><li><strong>Optional:</strong> Allow Google-Extended (Gemini training — does NOT affect Google Search/AI Overviews), ClaudeBot (Anthropic)</li><li>The Content-Signal line is Cloudflare-managed and harmless — no action needed on that</li></ul>',
+                    description: 'Cloudflare was blocking AI search crawlers (GPTBot, Amazonbot, meta-externalagent) via managed robots.txt injection + global "Block AI Bots" toggle. Fixed by disabling both and configuring granular per-bot Allow/Block in Cloudflare AI Crawl Control.',
+                    fix: '<ul><li><strong>Done:</strong> Cloudflare > Security > Settings > Block AI Bots Scope → "Do not block"</li><li><strong>Done:</strong> AI Crawl Control > Directives > Managed robots.txt → OFF</li><li><strong>Done:</strong> AI Crawl Control > Crawlers → per-bot Allow/Block configured</li><li><strong>Done:</strong> Mileage OS standard updated (6 docs) for all future clients</li></ul>',
                     affected: 'N/A — affects all crawlers parsing robots.txt'
                 },
                 {
