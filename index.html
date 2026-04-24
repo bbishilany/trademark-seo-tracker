@@ -144,6 +144,17 @@
             transform: rotate(45deg) translateY(-1px);
         }
         .fix-title { font-weight: 500; flex: 1; font-size: 0.95rem; }
+        .fix-note-flag {
+            font-size: 0.7rem;
+            font-weight: 600;
+            padding: 0.15rem 0.5rem;
+            border-radius: 999px;
+            background: #fef3c7;
+            color: #b45309;
+            white-space: nowrap;
+            display: none;
+        }
+        .fix-note-flag.visible { display: inline-block; }
         .fix-impact {
             font-size: 0.75rem;
             padding: 0.15rem 0.5rem;
@@ -791,6 +802,7 @@
                         <div class="fix-header">
                             <div class="fix-checkbox ${done ? 'checked' : ''}" data-id="${fix.id}"></div>
                             <span class="fix-title">${fix.title}</span>
+                            <span class="fix-note-flag ${hasNote ? 'visible' : ''}" data-flag="${fix.id}">has note</span>
                             <span class="fix-impact">${fix.impact}</span>
                             <span class="fix-expand">&#9662;</span>
                         </div>
@@ -831,6 +843,8 @@
         if (textarea && textarea !== document.activeElement) textarea.value = note;
         const indicator = card.querySelector('.note-indicator');
         if (indicator) indicator.classList.toggle('has-note', note.trim().length > 0);
+        const flag = card.querySelector('.fix-note-flag');
+        if (flag) flag.classList.toggle('visible', note.trim().length > 0);
         updateProgress();
     }
 
@@ -914,6 +928,8 @@
             notesState[id] = e.target.value;
             const indicator = document.querySelector(`.note-indicator[data-id="${id}"]`);
             if (indicator) indicator.classList.toggle('has-note', e.target.value.trim().length > 0);
+            const flag = document.querySelector(`.fix-note-flag[data-flag="${id}"]`);
+            if (flag) flag.classList.toggle('visible', e.target.value.trim().length > 0);
             clearTimeout(saveTimeout[id]);
             saveTimeout[id] = setTimeout(() => {
                 cacheNotes();
