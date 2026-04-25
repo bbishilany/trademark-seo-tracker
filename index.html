@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Trademark Financial — SEO Fix Tracker</title>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -144,18 +143,6 @@
             transform: rotate(45deg) translateY(-1px);
         }
         .fix-title { font-weight: 500; flex: 1; font-size: 0.95rem; }
-        .fix-note-flag {
-            font-size: 0.7rem;
-            font-weight: 600;
-            padding: 0.15rem 0.5rem;
-            border-radius: 999px;
-            background: #fef3c7;
-            color: #b45309;
-            white-space: nowrap;
-            display: none;
-        }
-        .fix-note-flag.visible { display: inline-block; }
-        .fix-note-flag.blocked { background: #fee2e2; color: #dc2626; }
         .fix-impact {
             font-size: 0.75rem;
             padding: 0.15rem 0.5rem;
@@ -215,124 +202,50 @@
             line-height: 1.5;
         }
 
-        /* ── Comments ── */
-        .comments-section { margin-top: 1rem; }
-        .comments-section h4 { margin-bottom: 0.5rem; }
-        .comments-list { margin-bottom: 0.5rem; }
-        .comment {
-            padding: 0.5rem 0;
-            border-bottom: 1px solid #f1f5f9;
-            font-size: 0.85rem;
-        }
-        .comment:last-child { border-bottom: none; }
-        .comment-meta {
-            font-size: 0.75rem;
-            color: #94a3b8;
-            margin-bottom: 0.15rem;
-        }
-        .comment-author { font-weight: 600; color: #334155; }
-        .comment-body { color: #475569; line-height: 1.5; }
-        .comment-form {
+        /* ── Notes / Blockers ── */
+        .notes-section { margin-top: 1rem; }
+        .notes-section h4 {
             display: flex;
-            gap: 0.5rem;
-            align-items: flex-start;
+            align-items: center;
+            gap: 0.4rem;
         }
-        .comment-input {
-            flex: 1;
-            padding: 0.5rem 0.75rem;
+        .note-indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: transparent;
+            transition: background 0.2s;
+        }
+        .note-indicator.has-note { background: #f59e0b; }
+        .notes-textarea {
+            width: 100%;
+            min-height: 60px;
+            margin-top: 0.4rem;
+            padding: 0.6rem 0.75rem;
             border: 1px solid #e2e8f0;
             border-radius: 6px;
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             font-size: 0.85rem;
             color: #334155;
-            background: #fff;
-            resize: none;
-            min-height: 38px;
             line-height: 1.5;
+            resize: vertical;
+            transition: border-color 0.2s;
+            background: #fff;
         }
-        .comment-input:focus {
+        .notes-textarea:focus {
             outline: none;
             border-color: #3b82f6;
             box-shadow: 0 0 0 3px rgba(59,130,246,0.1);
         }
-        .comment-input::placeholder { color: #94a3b8; }
-        .btn-send {
-            padding: 0.5rem 1rem;
-            border-radius: 6px;
-            border: none;
-            background: #0f172a;
-            color: white;
-            font-size: 0.8rem;
-            font-weight: 600;
-            cursor: pointer;
-            white-space: nowrap;
-            transition: background 0.2s;
+        .notes-textarea::placeholder { color: #94a3b8; }
+        .note-saved {
+            font-size: 0.75rem;
+            color: #059669;
+            margin-top: 0.3rem;
+            opacity: 0;
+            transition: opacity 0.3s;
         }
-        .btn-send:hover { background: #1e293b; }
-        .btn-send:disabled { opacity: 0.4; cursor: default; }
-        /* ── Name Prompt ── */
-        .name-overlay {
-            position: fixed; inset: 0;
-            background: rgba(15,23,42,0.5);
-            display: flex; align-items: center; justify-content: center;
-            z-index: 1000;
-        }
-        .name-dialog {
-            background: white;
-            border-radius: 12px;
-            padding: 2rem;
-            max-width: 340px;
-            width: 90%;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
-        }
-        .name-dialog h2 { font-size: 1.1rem; margin-bottom: 0.5rem; }
-        .name-dialog p { font-size: 0.85rem; color: #64748b; margin-bottom: 1rem; }
-        .name-dialog input {
-            width: 100%;
-            padding: 0.6rem 0.75rem;
-            border: 1px solid #e2e8f0;
-            border-radius: 6px;
-            font-size: 0.95rem;
-            margin-bottom: 0.75rem;
-        }
-        .name-dialog input:focus { outline: none; border-color: #3b82f6; }
-        .name-dialog button {
-            width: 100%;
-            padding: 0.6rem;
-            background: #0f172a;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            font-size: 0.9rem;
-            font-weight: 600;
-            cursor: pointer;
-        }
-        .name-dialog button:hover { background: #1e293b; }
-
-        /* ── Verification Receipt ── */
-        .receipt {
-            margin-top: 1rem;
-            padding: 0.75rem 1rem;
-            border-radius: 6px;
-            font-size: 0.8rem;
-            line-height: 1.5;
-            border: 1px solid;
-        }
-        .receipt-header {
-            font-weight: 700;
-            text-transform: uppercase;
-            font-size: 0.7rem;
-            letter-spacing: 0.05em;
-            margin-bottom: 0.25rem;
-        }
-        .receipt.verified { background: #f0fdf4; border-color: #bbf7d0; color: #166534; }
-        .receipt.verified .receipt-header { color: #059669; }
-        .receipt.not-fixed { background: #fef2f2; border-color: #fecaca; color: #991b1b; }
-        .receipt.not-fixed .receipt-header { color: #dc2626; }
-        .receipt.partial { background: #fffbeb; border-color: #fde68a; color: #92400e; }
-        .receipt.partial .receipt-header { color: #d97706; }
-        .receipt.na { background: #f8fafc; border-color: #e2e8f0; color: #64748b; }
-        .receipt.na .receipt-header { color: #94a3b8; }
+        .note-saved.visible { opacity: 1; }
 
         /* ── Info Callout ── */
         .info-card {
@@ -374,16 +287,11 @@
         <div id="fixList"></div>
 
         <footer>
-            Mileage Intelligence &bull; SEO Fix Tracker &bull; Real-time sync enabled
+            Mileage Intelligence &bull; SEO Fix Tracker &bull; Data persists in your browser (localStorage)
         </footer>
     </div>
 
     <script>
-    // ── Supabase Config ──
-    const SUPABASE_URL = 'https://byuxmsohwsvnqfirgeit.supabase.co';
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ5dXhtc29od3N2bnFmaXJnZWl0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ0MDE3NzYsImV4cCI6MjA4OTk3Nzc3Nn0.YctPyGRzwgdz9-HaHDnWO0KhrVhElRhYKg7feIWPd1c';
-    const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
     const phases = [
         {
             id: 'phase1',
@@ -395,7 +303,6 @@
                     id: 'cf-email',
                     priority: 'critical',
                     done: true,
-                    receipt: { status: 'verified', text: 'No /cdn-cgi/l/email-protection links found on homepage. Email rendered as standard mailto link.', date: 'Apr 24, 2026' },
                     title: 'Fix Cloudflare email obfuscation broken links',
                     impact: '40+ pages',
                     description: 'Cloudflare\'s Email Address Obfuscation feature generates crawlable links to <code>/cdn-cgi/l/email-protection</code> that return 404. This is the single largest source of broken internal links on the site.',
@@ -406,7 +313,6 @@
                     id: 'schedule-redirect',
                     priority: 'critical',
                     done: true,
-                    receipt: { status: 'verified', text: '301 redirect confirmed: /schedule-consultation/ → /schedule-a-consultation/. Redirect-by: Redirection plugin.', date: 'Apr 24, 2026' },
                     title: 'Redirect /schedule-consultation/ to /schedule-a-consultation/',
                     impact: '20+ blog posts',
                     description: 'Blog posts use <code>/schedule-consultation/</code> as the CTA link, but the actual page lives at <code>/schedule-a-consultation/</code>. Every blog post\'s CTA is broken.',
@@ -416,7 +322,6 @@
                 {
                     id: 'sitemap-canonical',
                     priority: 'critical',
-                    receipt: { status: 'not-fixed', text: 'post-sitemap.xml not accessible for verification. Needs manual check via Google Search Console or direct crawl.', date: 'Apr 24, 2026' },
                     title: 'Fix 33 non-canonical URLs in post-sitemap.xml',
                     impact: '33 blog posts',
                     description: 'The <code>post-sitemap.xml</code> includes URLs that don\'t match their canonical tags. This sends Google conflicting signals about the preferred URL for 33 blog posts.',
@@ -427,7 +332,6 @@
                     id: 'november-redirect',
                     priority: 'high',
                     done: true,
-                    receipt: { status: 'verified', text: '301 redirect confirmed: /trademark-update-for-november-30-2025/ → /blog/trademark-update-november-30-2025/. About Us page updated to correct URL.', date: 'Apr 24, 2026' },
                     title: 'Redirect /trademark-update-for-november-30-2025/',
                     impact: '2 pages',
                     description: 'About Us and Services/Third-Party Asset Management pages link to <code>/trademark-update-for-november-30-2025/</code> which doesn\'t exist. The correct URL is <code>/blog/trademark-update-november-30-2025/</code>.',
@@ -437,18 +341,15 @@
                 {
                     id: 'robots-txt',
                     priority: 'high',
-                    done: true,
-                    receipt: { status: 'verified', text: 'Fixed. Cloudflare managed robots.txt disabled — Content-Signal and all AI bot Disallow directives removed. Per-bot CDN enforcement configured in AI Crawl Control: GPTBot, PerplexityBot, Meta-ExternalAgent, Amazonbot, ClaudeBot, and all AI search crawlers ALLOWED. CCBot, Bytespider, TikTok Spider, PetalBot, Novellum, ProRataInc, Timpibot BLOCKED (training-only). robots.txt now clean — only Yoast sitemap reference remains. Verified via curl.', date: 'Apr 24, 2026' },
                     title: 'Fix malformed robots.txt directive',
                     impact: 'Site-wide crawl',
-                    description: 'Cloudflare was blocking AI search crawlers (GPTBot, Amazonbot, meta-externalagent) via managed robots.txt injection + global "Block AI Bots" toggle. Fixed by disabling both and configuring granular per-bot Allow/Block in Cloudflare AI Crawl Control.',
-                    fix: '<ul><li><strong>Done:</strong> Cloudflare > Security > Settings > Block AI Bots Scope → "Do not block"</li><li><strong>Done:</strong> AI Crawl Control > Directives > Managed robots.txt → OFF</li><li><strong>Done:</strong> AI Crawl Control > Crawlers → per-bot Allow/Block configured</li><li><strong>Done:</strong> Mileage OS standard updated (6 docs) for all future clients</li></ul>',
+                    description: 'The robots.txt contains a non-standard line: <code>Content-Signal: search=yes,ai-train=no</code>. This isn\'t part of the robots.txt specification and may confuse strict parsers.',
+                    fix: '<ul><li><strong>Option A (recommended):</strong> Remove the line from robots.txt. Instead, express AI training preferences via:</li><li>HTTP response headers: <code>X-Robots-Tag: noai, noimageai</code></li><li>A dedicated <code>/llms.txt</code> file (see next fix)</li><li>Meta tags: <code>&lt;meta name="robots" content="noai, noimageai"&gt;</code></li><li><strong>Option B:</strong> Keep the line — most crawlers ignore unknown directives. Document that this is intentional.</li><li><strong>Where to edit:</strong> Check if Yoast/RankMath manages robots.txt, or edit the physical file at the WordPress root</li></ul>',
                     affected: 'N/A — affects all crawlers parsing robots.txt'
                 },
                 {
                     id: 'llms-txt',
                     priority: 'high',
-                    receipt: { status: 'not-fixed', text: '/llms.txt returns 404. File has not been created yet.', date: 'Apr 24, 2026' },
                     title: 'Create /llms.txt for GEO discoverability',
                     impact: 'AI/LLM visibility',
                     description: 'The site signals AI crawl preferences in robots.txt but has no <code>/llms.txt</code> file. This is a GEO (Generative Engine Optimization) opportunity to control how AI models understand Trademark Financial.',
@@ -458,8 +359,6 @@
                 {
                     id: 'title-length',
                     priority: 'medium',
-                    done: true,
-                    receipt: { status: 'verified', text: 'All 3 titles shortened: "Market Perspective: Nov. 2023" (was 43 chars → now within limit), "Q4 2025 Market Summary", "Q4 2010 Perspective". Brand suffix updated to "| Trademark Financial Management".', date: 'Apr 24, 2026' },
                     title: 'Shorten 3 over-length title tags',
                     impact: '3 pages',
                     description: 'Three blog post titles exceed Google\'s ~60 character display limit. The brand suffix " - Trademark Financial Management" (34 chars) consumes half the available space.',
@@ -469,8 +368,6 @@
                 {
                     id: 'external-broken',
                     priority: 'medium',
-                    done: true,
-                    receipt: { status: 'verified', text: 'Confirmed: the johnmauldin.com hyperlink has been removed from the post. "John Mauldin" now appears as plain text attribution only — no broken outbound link remains. Page HTML verified via curl.', date: 'Apr 24, 2026' },
                     title: 'Fix external broken link (johnmauldin.com)',
                     impact: '1 page',
                     description: 'The blog post "Market Perspective — Mark Carlton, CFA" links to <code>http://www.johnmauldin.com/</code> which returns a 503 error.',
@@ -480,17 +377,21 @@
                 {
                     id: 'broken-image',
                     priority: 'medium',
-                    receipt: { status: 'not-fixed', text: 'Image at /wp-content/uploads/2026/02/10a26b_3c66dcc42b8d4e6290bb34c3fd7bcd70.jpg still referenced in post HTML. Appears broken — no alt text, likely Wix migration artifact still unresolved.', date: 'Apr 24, 2026' },
+                    done: true,
                     title: 'Fix broken image on Quarterly Market Summary',
                     impact: '1 page',
                     description: 'The image <code>/wp-content/uploads/2026/02/10a26b_3c66dcc42b8d4e6290bb34c3fd7bcd70.jpg</code> returns 404. The filename pattern (hex hash) suggests a Wix migration artifact.',
                     fix: '<ul><li>Navigate to the post in WordPress editor: /blog/quarterly-market-summary/</li><li>Find the broken image block</li><li>Either re-upload the correct image or remove the broken reference</li><li>If the original image exists elsewhere (check Wix export or client\'s files), re-upload to WordPress Media Library</li></ul>',
-                    affected: '/blog/quarterly-market-summary/'
+                    affected: '/blog/quarterly-market-summary/',
+                    receipt: {
+                        status: 'verified',
+                        date: 'Apr 24, 2026',
+                        text: 'Broken <code>&lt;figure&gt;</code> block removed from post in WordPress editor (Code view). Confirmed via curl — page source no longer contains the Wix migration image reference <code>10a26b_3c66dcc42b8d4e6290bb34c3fd7bcd70.jpg</code>. Image was invisible to visitors (empty alt, no dimensions) but was a crawl quality signal.'
+                    }
                 },
                 {
                     id: 'anchor-text',
                     priority: 'medium',
-                    receipt: { status: 'partial', text: 'ritholtz.com link now has anchor text ("MiB: Controlling Your Limbic System Determines Your Financial Success"). Blog pagination links not yet verified — need crawl tool to check all prev/next links.', date: 'Apr 24, 2026' },
                     title: 'Add anchor text to 27 links',
                     impact: '27 links',
                     description: '26 blog pagination links (prev/next) have no visible anchor text, and 1 external link to ritholtz.com lacks anchor text. Search engines use anchor text to understand link context.',
@@ -509,7 +410,6 @@
                 {
                     id: 'service-cross-links',
                     priority: 'critical',
-                    receipt: { status: 'not-fixed', text: 'No "Related Services" section in body content on any service page. Cross-links exist only in nav menu. TPAM, OCIO, and Investment Consulting pages are still siloed.', date: 'Apr 24, 2026' },
                     title: 'Add "Related Services" cross-links on each service page',
                     impact: '3 pages',
                     description: 'The three core service pages are siloed — none links to the others in body content. Users and crawlers hit dead ends at every service page.',
@@ -519,8 +419,6 @@
                 {
                     id: 'who-we-serve-children',
                     priority: 'critical',
-                    done: true,
-                    receipt: { status: 'verified', text: 'Body content contains "Solutions for Financial Advisors" → /who-we-serve/for-professionals/ and "What Our Clients Experience" → /who-we-serve/for-clients/. Both are CTA blocks, not just nav.', date: 'Apr 24, 2026' },
                     title: 'Add child page links in /who-we-serve/ body',
                     impact: '1 page',
                     description: '<code>/who-we-serve/</code> acts as a parent page but does not link to its child pages in body content. The parent-child relationship is invisible to Google.',
@@ -530,7 +428,6 @@
                 {
                     id: 'orphaned-audience',
                     priority: 'high',
-                    receipt: { status: 'partial', text: 'Homepage has "Who We Serve" section with links to both audience pages. About Us and Service pages only link via nav/footer, not body content. Needs body-content links on About + Services.', date: 'Apr 24, 2026' },
                     title: 'Link to audience pages from Homepage, Services, About',
                     impact: '3+ pages',
                     description: '<code>/for-professionals/</code> and <code>/for-clients/</code> receive <strong>zero inbound body links</strong> from any page. Only reachable via nav menus.',
@@ -540,8 +437,6 @@
                 {
                     id: 'broken-blog-link',
                     priority: 'high',
-                    done: true,
-                    receipt: { status: 'verified', text: 'About Us now links to /blog/trademark-update-november-30-2025/ (correct URL). 301 redirect also in place from old slug as safety net.', date: 'Apr 24, 2026' },
                     title: 'Fix broken blog link on About Us + TPAM',
                     impact: '2 pages',
                     description: 'About Us and TPAM link to <code>/trademark-update-for-november-30-2025/</code> which is a 404. The correct URL is <code>/blog/trademark-update-november-30-2025/</code>.',
@@ -551,7 +446,6 @@
                 {
                     id: 'faq-isolated',
                     priority: 'high',
-                    receipt: { status: 'not-fixed', text: 'FAQ answers mention services by name but contain zero hyperlinks to service pages. Only outbound link is "contact our team." No service or audience pages link to FAQ in body content. Note: FAQ slug is /frequently-asked-questions/, not /faq/.', date: 'Apr 24, 2026' },
                     title: 'Connect FAQ bidirectionally',
                     impact: '5+ pages',
                     description: '<code>/faq/</code> has no body-content links from service or audience pages. Only reachable via nav.',
@@ -562,7 +456,6 @@
                     id: 'footer-cleanup',
                     priority: 'high',
                     done: true,
-                    receipt: { status: 'verified', text: 'Footer standardized across site. Contains: Minnesota, About Us, Team, FAQs, Who We Serve, For Clients, For Professionals, Services, Privacy Policy, Disclaimer, Business Continuity, Form ADV/CRS. No /careers/ link.', date: 'Apr 24, 2026' },
                     title: 'Standardize footer + remove /careers/ link',
                     impact: 'All pages',
                     description: 'Footer varies across pages and links to /careers/ (404 — page in design, not yet built).',
@@ -572,8 +465,6 @@
                 {
                     id: 'minnesota-links',
                     priority: 'medium',
-                    done: true,
-                    receipt: { status: 'verified', text: 'Homepage "Where We Serve" section links to /location/minnesota/. Footer also includes Minnesota link. Note: live slug is /location/minnesota/, not /minnesota/.', date: 'Apr 24, 2026' },
                     title: 'Add geographic links to /minnesota/',
                     impact: '2 pages',
                     description: '<code>/minnesota/</code> is the primary geographic target but gets no links from high-authority pages. Location pages need contextual reinforcement from top pages.',
@@ -583,8 +474,6 @@
                 {
                     id: 'blog-island',
                     priority: 'medium',
-                    done: true,
-                    receipt: { status: 'verified', text: 'Homepage has "Our Latest Insights" section featuring 3 recent posts (Mar 2026, Feb 2026, Jan 2026) with titles as anchor text linking to /blog/*.', date: 'Apr 24, 2026' },
                     title: 'Add "Latest Insights" to core pages',
                     impact: '2+ pages',
                     description: 'No core page (Home, Services, About) links to blog content. The blog is an isolated content island receiving no authority from the main site.',
@@ -594,7 +483,6 @@
                 {
                     id: 'consultation-dead-end',
                     priority: 'medium',
-                    receipt: { status: 'not-fixed', text: 'Consultation page has the form plus "Our Process" and "Benefits" sections, but no body-content links to Services, FAQ, or Insights. Only nav/footer links available for visitors who aren\'t ready to submit.', date: 'Apr 24, 2026' },
                     title: 'Enrich consultation page with exit links',
                     impact: '1 page',
                     description: '<code>/schedule-a-consultation/</code> has a form but no links back to services, resources, or any other page. Visitors who aren\'t ready to submit have nowhere to go but leave.',
@@ -613,7 +501,6 @@
                     id: 'meta-home',
                     priority: 'high',
                     done: true,
-                    receipt: { status: 'verified', text: 'Title: "Third-Party Asset Management for Advisors | Trademark Financial Management". Description: "Discover outsourced investment management, OCIO solutions, and model portfolios built to support modern financial advisors."', date: 'Apr 24, 2026' },
                     title: 'Home',
                     impact: '/',
                     description: 'No meta title or description set. Google is auto-generating the snippet.',
@@ -623,8 +510,6 @@
                 {
                     id: 'meta-about',
                     priority: 'high',
-                    done: true,
-                    receipt: { status: 'verified', text: 'Title: "About Trademark | Financial Management". Description: "Learn who we are, how we serve advisors, and why our disciplined, fiduciary investment approach strengthens client portfolios."', date: 'Apr 24, 2026' },
                     title: 'About Us',
                     impact: '/about',
                     description: 'No meta title or description set.',
@@ -634,8 +519,6 @@
                 {
                     id: 'meta-team',
                     priority: 'high',
-                    done: true,
-                    receipt: { status: 'verified', text: 'Title: "Meet the Trademark Financial Team | Trademark Financial". Description: "Meet our experienced investment professionals delivering outsourced management, research, and advisor-focused portfolio expertise."', date: 'Apr 24, 2026' },
                     title: 'Team',
                     impact: '/about/team',
                     description: 'No meta title or description set.',
@@ -646,7 +529,6 @@
                     id: 'meta-who-we-serve',
                     priority: 'high',
                     done: true,
-                    receipt: { status: 'verified', text: 'Title: "Who We Serve at Trademark Financial". Description matches spec.', date: 'Apr 24, 2026' },
                     title: 'Who We Serve',
                     impact: '/who-we-serve',
                     description: 'No meta title or description set.',
@@ -657,7 +539,6 @@
                     id: 'meta-for-professionals',
                     priority: 'high',
                     done: true,
-                    receipt: { status: 'verified', text: 'Title: "Solutions for Financial Advisors | Trademark Financial Management". Description matches spec.', date: 'Apr 24, 2026' },
                     title: 'For Professionals',
                     impact: '/who-we-serve/for-professionals',
                     description: 'No meta title or description set.',
@@ -668,7 +549,6 @@
                     id: 'meta-for-clients',
                     priority: 'high',
                     done: true,
-                    receipt: { status: 'verified', text: 'Title: "Client Experience at Trademark Financial | Trademark Financial Management". Description matches spec.', date: 'Apr 24, 2026' },
                     title: 'For Clients',
                     impact: '/who-we-serve/for-clients',
                     description: 'No meta title or description set.',
@@ -679,7 +559,6 @@
                     id: 'meta-services',
                     priority: 'high',
                     done: true,
-                    receipt: { status: 'verified', text: 'Title: "Investment Services for Advisors | Trademark Financial Management". Description matches spec.', date: 'Apr 24, 2026' },
                     title: 'Services Overview',
                     impact: '/services',
                     description: 'No meta title or description set.',
@@ -690,7 +569,6 @@
                     id: 'meta-tpam',
                     priority: 'high',
                     done: true,
-                    receipt: { status: 'verified', text: 'Title: "Third-Party Asset Management | Trademark Financial Management". Description matches spec.', date: 'Apr 24, 2026' },
                     title: 'Third-Party Asset Management',
                     impact: '/services/third-party-asset-management',
                     description: 'No meta title or description set.',
@@ -700,8 +578,6 @@
                 {
                     id: 'meta-ocio',
                     priority: 'high',
-                    done: true,
-                    receipt: { status: 'verified', text: 'Title: "Outsourced CIO Services | Trademark Financial Management". Description matches spec. Note: live slug is /services/outsourced-cio-services/, not /services/ocio-services/.', date: 'Apr 24, 2026' },
                     title: 'OCIO Services',
                     impact: '/services/ocio-services',
                     description: 'No meta title or description set.',
@@ -712,7 +588,6 @@
                     id: 'meta-consulting',
                     priority: 'high',
                     done: true,
-                    receipt: { status: 'verified', text: 'Title: "Investment Consulting Services | Trademark Financial Management". Description matches spec.', date: 'Apr 24, 2026' },
                     title: 'Investment Consulting',
                     impact: '/services/investment-consulting',
                     description: 'No meta title or description set.',
@@ -723,7 +598,6 @@
                     id: 'meta-insights',
                     priority: 'high',
                     done: true,
-                    receipt: { status: 'verified', text: 'Title: "Investment Insights & Resources | Trademark Financial Management". Description matches spec. Canonical URL is /insights/.', date: 'Apr 24, 2026' },
                     title: 'Insights',
                     impact: '/insights',
                     description: 'No meta title or description set.',
@@ -734,7 +608,6 @@
                     id: 'meta-contact',
                     priority: 'high',
                     done: true,
-                    receipt: { status: 'verified', text: 'Title: "Contact Trademark Financial". Description: "Connect with our investment team to discuss outsourcing solutions, portfolio support, and advisory partnership opportunities."', date: 'Apr 24, 2026' },
                     title: 'Contact',
                     impact: '/contact',
                     description: 'No meta title or description set.',
@@ -745,7 +618,6 @@
                     id: 'meta-consultation',
                     priority: 'high',
                     done: true,
-                    receipt: { status: 'verified', text: 'Title: "Schedule a Consultation | Trademark Financial Management". Description matches spec. Live URL is /schedule-a-consultation/.', date: 'Apr 24, 2026' },
                     title: 'Schedule a Consultation',
                     impact: '/consultation',
                     description: 'No meta title or description set. Note: master sheet URL is /consultation but live site uses /schedule-a-consultation.',
@@ -755,8 +627,6 @@
                 {
                     id: 'meta-faq',
                     priority: 'high',
-                    done: true,
-                    receipt: { status: 'verified', text: 'Title: "Frequently Asked Questions | Trademark Financial". Description matches spec. Note: live slug is /frequently-asked-questions/, not /faq/.', date: 'Apr 24, 2026' },
                     title: 'FAQ',
                     impact: '/faq',
                     description: 'No meta title or description set.',
@@ -766,8 +636,6 @@
                 {
                     id: 'meta-minnesota',
                     priority: 'high',
-                    done: true,
-                    receipt: { status: 'verified', text: 'Title: "Asset Management in Minnesota | Trademark Financial Management". Description matches spec. Live slug is /location/minnesota/.', date: 'Apr 24, 2026' },
                     title: 'Minnesota',
                     impact: '/minnesota',
                     description: 'No meta title or description set.',
@@ -777,7 +645,6 @@
                 {
                     id: 'meta-disclosures',
                     priority: 'medium',
-                    receipt: { status: 'not-fixed', text: '/disclosures/ returns 404. Page may use a different slug — needs manual check in WordPress admin.', date: 'Apr 24, 2026' },
                     title: 'Legal / Disclosures',
                     impact: '/disclosures',
                     description: 'No meta title or description set.',
@@ -788,7 +655,6 @@
                     id: 'meta-privacy',
                     priority: 'medium',
                     done: true,
-                    receipt: { status: 'verified', text: 'Title: "Privacy Policy | Trademark Financial Management". Description matches spec.', date: 'Apr 24, 2026' },
                     title: 'Privacy Policy',
                     impact: '/privacy-policy',
                     description: 'No meta title or description set.',
@@ -798,7 +664,6 @@
                 {
                     id: 'meta-form-adv',
                     priority: 'medium',
-                    receipt: { status: 'na', text: '/form-adv/ returns 404. Footer links to external SEC page for Form ADV/CRS — may not be a WordPress page. Check if meta tags are needed or if this is handled externally.', date: 'Apr 24, 2026' },
                     title: 'Form ADV & CRS',
                     impact: '/form-adv',
                     description: 'No meta title or description set.',
@@ -809,7 +674,6 @@
                     id: 'meta-disclaimer',
                     priority: 'medium',
                     done: true,
-                    receipt: { status: 'verified', text: 'Title: "General Disclaimer | Trademark Financial Management". Description matches spec.', date: 'Apr 24, 2026' },
                     title: 'General Disclaimer',
                     impact: '/disclaimer',
                     description: 'No meta title or description set.',
@@ -820,7 +684,6 @@
                     id: 'meta-continuity',
                     priority: 'medium',
                     done: true,
-                    receipt: { status: 'verified', text: 'Title: "Business Continuity Plan | Trademark Financial Management". Description matches spec.', date: 'Apr 24, 2026' },
                     title: 'Business Continuity',
                     impact: '/business-continuity',
                     description: 'No meta title or description set.',
@@ -830,7 +693,6 @@
                 {
                     id: 'meta-client-portal',
                     priority: 'medium',
-                    receipt: { status: 'na', text: '/client-portal/ returns 404. Page may not exist as a WordPress page — could be an external portal link. Check WordPress admin.', date: 'Apr 24, 2026' },
                     title: 'Client Portal',
                     impact: '/client-portal',
                     description: 'No meta title or description set.',
@@ -840,7 +702,6 @@
                 {
                     id: 'meta-careers',
                     priority: 'medium',
-                    receipt: { status: 'na', text: '/careers/ returns 404. Page is in design, not yet built. Set meta tags when page goes live.', date: 'Apr 24, 2026' },
                     title: 'Careers (not yet built)',
                     impact: '/careers',
                     description: 'Page is in design, heading to development. Set meta tags when the page goes live.',
@@ -850,7 +711,6 @@
                 {
                     id: 'meta-saint-paul',
                     priority: 'medium',
-                    receipt: { status: 'na', text: 'Page not yet built. Set meta tags when /saint-paul/ goes live.', date: 'Apr 24, 2026' },
                     title: 'Saint Paul (not yet built)',
                     impact: '/saint-paul',
                     description: 'Location page in master sheet but not yet built.',
@@ -860,7 +720,6 @@
                 {
                     id: 'meta-minneapolis',
                     priority: 'medium',
-                    receipt: { status: 'na', text: 'Page not yet built. Set meta tags when /minneapolis/ goes live.', date: 'Apr 24, 2026' },
                     title: 'Minneapolis (not yet built)',
                     impact: '/minneapolis',
                     description: 'Location page in master sheet but not yet built.',
@@ -871,53 +730,69 @@
         }
     ];
 
-    // ── State ──
-    let completedState = {};
-    let commentsState = {};  // { fixId: [{ author, body, created_at }] }
-    let currentUser = localStorage.getItem('seo-tracker-user') || '';
-
-    // ── localStorage (write-through cache + offline fallback) ──
+    // Unified storage — preserves any existing Phase 1 data
     const STORAGE_KEY = 'trademark-seo-fixes';
+    const NOTES_KEY = 'trademark-seo-notes';
 
-    function cacheCompleted() {
-        try { localStorage.setItem(STORAGE_KEY, JSON.stringify(completedState)); } catch {}
+    function getCompleted() {
+        try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; }
+        catch { return {}; }
     }
-    function loadCachedCompleted() {
-        try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; } catch { return {}; }
+    function saveCompleted(data) {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    }
+    function getNotes() {
+        try { return JSON.parse(localStorage.getItem(NOTES_KEY)) || {}; }
+        catch { return {}; }
+    }
+    function saveNotes(data) {
+        localStorage.setItem(NOTES_KEY, JSON.stringify(data));
     }
 
-    // ── Name prompt ──
-    function ensureUser() {
-        if (currentUser) return;
-        const overlay = document.createElement('div');
-        overlay.className = 'name-overlay';
-        overlay.innerHTML = `<div class="name-dialog">
-            <h2>Welcome to the SEO Tracker</h2>
-            <p>Enter your name so comments are attributed to you.</p>
-            <input type="text" id="nameInput" placeholder="Your first name" autofocus>
-            <button id="nameSubmit">Continue</button>
-        </div>`;
-        document.body.appendChild(overlay);
-        const input = document.getElementById('nameInput');
-        const submit = document.getElementById('nameSubmit');
-        function saveName() {
-            const name = input.value.trim();
-            if (!name) return;
-            currentUser = name;
-            localStorage.setItem('seo-tracker-user', name);
-            overlay.remove();
-        }
-        submit.addEventListener('click', saveName);
-        input.addEventListener('keydown', (e) => { if (e.key === 'Enter') saveName(); });
-    }
+    // Migrate notes from old internal-links key if present
+    (function migrateNotes() {
+        try {
+            const old = JSON.parse(localStorage.getItem('trademark-internal-links-notes'));
+            if (old && Object.keys(old).length > 0) {
+                const current = getNotes();
+                Object.assign(current, old);
+                saveNotes(current);
+                localStorage.removeItem('trademark-internal-links-notes');
+            }
+        } catch {}
+        // Also merge any old internal-links checkbox data
+        try {
+            const old = JSON.parse(localStorage.getItem('trademark-internal-links'));
+            if (old && Object.keys(old).length > 0) {
+                const current = getCompleted();
+                Object.assign(current, old);
+                saveCompleted(current);
+                localStorage.removeItem('trademark-internal-links');
+            }
+        } catch {}
+    })();
+
+    // Pre-populate localStorage with items marked done in the data
+    (function seedDoneFlags() {
+        const completed = getCompleted();
+        let changed = false;
+        phases.forEach(p => p.fixes.forEach(f => {
+            if (f.done && !completed[f.id]) {
+                completed[f.id] = true;
+                changed = true;
+            }
+        }));
+        if (changed) saveCompleted(completed);
+    })();
 
     function getAllFixes() {
         return phases.flatMap(p => p.fixes);
     }
 
     function updateProgress() {
+        const completed = getCompleted();
         const all = getAllFixes();
-        const done = all.filter(f => completedState[f.id]).length;
+        const done = all.filter(f => completed[f.id]).length;
         document.getElementById('progressCount').textContent = done;
         document.getElementById('totalCount').textContent = all.length;
         document.getElementById('progressFill').style.width = `${(done / all.length) * 100}%`;
@@ -925,15 +800,26 @@
 
     function renderFixes() {
         const container = document.getElementById('fixList');
-        const priorityLabels = { critical: 'Critical', high: 'High', medium: 'Medium' };
+        const completed = getCompleted();
+        const notes = getNotes();
+
+        const priorityLabels = {
+            critical: 'Critical',
+            high: 'High',
+            medium: 'Medium'
+        };
 
         let html = '';
         phases.forEach(phase => {
             html += `<div class="phase-section">`;
             html += `<div class="phase-header"><span class="phase-badge">${phase.badge}</span><h2>${phase.title}</h2></div>`;
             html += `<div class="phase-subtitle">${phase.subtitle}</div>`;
-            if (phase.callout) html += `<div class="info-card">${phase.callout}</div>`;
 
+            if (phase.callout) {
+                html += `<div class="info-card">${phase.callout}</div>`;
+            }
+
+            // Group by priority
             const groups = { critical: [], high: [], medium: [] };
             phase.fixes.forEach(f => groups[f.priority].push(f));
 
@@ -943,15 +829,14 @@
                 html += `<div class="priority-header"><span class="priority-badge">${priorityLabels[priority]}</span><h3>${items.length} ${items.length === 1 ? 'item' : 'items'}</h3></div>`;
 
                 items.forEach(fix => {
-                    const done = completedState[fix.id] || false;
-                    const comments = commentsState[fix.id] || [];
-                    const hasComments = comments.length > 0;
+                    const done = completed[fix.id] || false;
+                    const note = notes[fix.id] || '';
+                    const hasNote = note.trim().length > 0;
                     html += `
                     <div class="fix-card ${done ? 'completed' : ''}" data-id="${fix.id}">
                         <div class="fix-header">
                             <div class="fix-checkbox ${done ? 'checked' : ''}" data-id="${fix.id}"></div>
                             <span class="fix-title">${fix.title}</span>
-                            <span class="fix-note-flag ${hasComments ? 'visible' : ''}" data-flag="${fix.id}">${hasComments ? comments.length : ''}</span>
                             <span class="fix-impact">${fix.impact}</span>
                             <span class="fix-expand">&#9662;</span>
                         </div>
@@ -962,14 +847,10 @@
                             ${fix.fix}
                             <h4>Affected Pages</h4>
                             <div class="affected-pages">${fix.affected.replace(/\n/g, '<br>')}</div>
-                            ${fix.receipt ? `<div class="receipt ${fix.receipt.status}"><div class="receipt-header">Verification &mdash; ${fix.receipt.date}</div>${fix.receipt.text}</div>` : ''}
-                            <div class="comments-section">
-                                <h4>Comments</h4>
-                                <div class="comments-list" data-comments="${fix.id}">${renderComments(comments)}</div>
-                                <div class="comment-form">
-                                    <input type="text" class="comment-input" data-id="${fix.id}" placeholder="Leave a comment...">
-                                    <button class="btn-send" data-id="${fix.id}">Send</button>
-                                </div>
+                            <div class="notes-section">
+                                <h4><span class="note-indicator ${hasNote ? 'has-note' : ''}" data-id="${fix.id}"></span> Notes / Blockers</h4>
+                                <textarea class="notes-textarea" data-id="${fix.id}" placeholder="Stuck? Note what's blocking you here...">${note}</textarea>
+                                <div class="note-saved" data-saved="${fix.id}">Saved</div>
                             </div>
                         </div>
                     </div>`;
@@ -983,137 +864,19 @@
         updateProgress();
     }
 
-    // ── Render comment list HTML ──
-    function renderComments(comments) {
-        if (!comments || comments.length === 0) return '';
-        return comments.map(c => {
-            const time = new Date(c.created_at).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' });
-            return `<div class="comment"><div class="comment-meta"><span class="comment-author">${c.author}</span> &middot; ${time}</div><div class="comment-body">${c.body}</div></div>`;
-        }).join('');
-    }
-
-    // ── Update a single card without full re-render ──
-    function updateCard(id) {
-        const card = document.querySelector(`.fix-card[data-id="${id}"]`);
-        if (!card) return;
-        const done = completedState[id] || false;
-        const comments = commentsState[id] || [];
-        card.classList.toggle('completed', done);
-        const cb = card.querySelector('.fix-checkbox');
-        if (cb) cb.classList.toggle('checked', done);
-        const flag = card.querySelector('.fix-note-flag');
-        if (flag) {
-            flag.classList.toggle('visible', comments.length > 0);
-            flag.textContent = comments.length > 0 ? comments.length : '';
-        }
-        const list = card.querySelector('.comments-list');
-        if (list) list.innerHTML = renderComments(comments);
-        updateProgress();
-    }
-
-    // ── Supabase: upsert a row ──
-    async function upsertRow(id, fields) {
-        const row = { id, ...fields, updated_at: new Date().toISOString() };
-        const { error } = await sb.from('seo_tracker').upsert(row);
-        if (error) console.error('Supabase upsert error:', error);
-    }
-
-    // ── Supabase: seed done flags ──
-    async function seedDoneFlags(existingIds) {
-        const toSeed = getAllFixes().filter(f => f.done && !existingIds.has(f.id));
-        if (toSeed.length === 0) return;
-        const rows = toSeed.map(f => ({ id: f.id, completed: true, note: '', updated_at: new Date().toISOString() }));
-        const { error } = await sb.from('seo_tracker').upsert(rows);
-        if (error) console.error('Seed error:', error);
-        toSeed.forEach(f => { completedState[f.id] = true; });
-    }
-
-    // ── Supabase: load initial state ──
-    async function loadFromSupabase() {
-        const { data, error } = await sb.from('seo_tracker').select('*');
-        if (error) {
-            console.warn('Supabase load failed, using localStorage cache:', error);
-            completedState = loadCachedCompleted();
-            renderFixes();
-            return;
-        }
-        const existingIds = new Set();
-        (data || []).forEach(row => {
-            existingIds.add(row.id);
-            completedState[row.id] = row.completed;
-        });
-        await seedDoneFlags(existingIds);
-        cacheCompleted();
-
-        // Load comments
-        const { data: comments, error: cErr } = await sb.from('seo_comments').select('*').order('created_at', { ascending: true });
-        if (!cErr && comments) {
-            comments.forEach(c => {
-                if (!commentsState[c.fix_id]) commentsState[c.fix_id] = [];
-                commentsState[c.fix_id].push(c);
-            });
-        }
-
-        renderFixes();
-    }
-
-    // ── Supabase: real-time subscriptions ──
-    function subscribeRealtime() {
-        sb.channel('seo-tracker-sync')
-            .on('postgres_changes', { event: '*', schema: 'public', table: 'seo_tracker' }, (payload) => {
-                const row = payload.new;
-                if (!row || !row.id) return;
-                completedState[row.id] = row.completed;
-                cacheCompleted();
-                updateCard(row.id);
-            })
-            .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'seo_comments' }, (payload) => {
-                const c = payload.new;
-                if (!c || !c.fix_id) return;
-                if (!commentsState[c.fix_id]) commentsState[c.fix_id] = [];
-                // Avoid duplicates (from own insert)
-                if (!commentsState[c.fix_id].some(x => x.id === c.id)) {
-                    commentsState[c.fix_id].push(c);
-                    updateCard(c.fix_id);
-                }
-            })
-            .subscribe();
-    }
-
-    // ── Post a comment ──
-    async function postComment(fixId, body) {
-        if (!body.trim() || !currentUser) return;
-        const comment = { fix_id: fixId, author: currentUser, body: body.trim() };
-        const { data, error } = await sb.from('seo_comments').insert(comment).select();
-        if (error) { console.error('Comment error:', error); return; }
-        if (data && data[0]) {
-            if (!commentsState[fixId]) commentsState[fixId] = [];
-            commentsState[fixId].push(data[0]);
-            updateCard(fixId);
-        }
-    }
-
-    // ── Event: checkbox toggle ──
+    // Checkbox + expand
     document.addEventListener('click', (e) => {
         const checkbox = e.target.closest('.fix-checkbox');
         if (checkbox) {
             e.stopPropagation();
             const id = checkbox.dataset.id;
-            completedState[id] = !completedState[id];
-            cacheCompleted();
-            updateCard(id);
-            upsertRow(id, { completed: completedState[id] });
-            return;
-        }
-        const sendBtn = e.target.closest('.btn-send');
-        if (sendBtn) {
-            e.stopPropagation();
-            const id = sendBtn.dataset.id;
-            const input = document.querySelector(`.comment-input[data-id="${id}"]`);
-            if (input && input.value.trim()) {
-                postComment(id, input.value);
-                input.value = '';
-            }
+            const completed = getCompleted();
+            completed[id] = !completed[id];
+            saveCompleted(completed);
+            const card = checkbox.closest('.fix-card');
+            card.classList.toggle('completed', completed[id]);
+            checkbox.classList.toggle('checked', completed[id]);
+            updateProgress();
             return;
         }
         const header = e.target.closest('.fix-header');
@@ -1122,27 +885,33 @@
         }
     });
 
-    // ── Enter key sends comment ──
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' && e.target.classList.contains('comment-input')) {
-            e.preventDefault();
+    // Notes auto-save
+    let saveTimeout = {};
+    document.addEventListener('input', (e) => {
+        if (e.target.classList.contains('notes-textarea')) {
             const id = e.target.dataset.id;
-            if (e.target.value.trim()) {
-                postComment(id, e.target.value);
-                e.target.value = '';
-            }
+            const notes = getNotes();
+            notes[id] = e.target.value;
+            const indicator = document.querySelector(`.note-indicator[data-id="${id}"]`);
+            if (indicator) indicator.classList.toggle('has-note', e.target.value.trim().length > 0);
+            clearTimeout(saveTimeout[id]);
+            saveTimeout[id] = setTimeout(() => {
+                saveNotes(notes);
+                const saved = document.querySelector(`[data-saved="${id}"]`);
+                if (saved) {
+                    saved.classList.add('visible');
+                    setTimeout(() => saved.classList.remove('visible'), 1500);
+                }
+            }, 500);
         }
     });
 
-    // Prevent expand/collapse when clicking inside comment input
+    // Prevent expand/collapse when clicking inside textarea
     document.addEventListener('click', (e) => {
-        if (e.target.classList.contains('comment-input')) e.stopPropagation();
+        if (e.target.classList.contains('notes-textarea')) e.stopPropagation();
     }, true);
 
-    // ── Init ──
-    ensureUser();
-    loadFromSupabase();
-    subscribeRealtime();
+    renderFixes();
     </script>
 </body>
 </html>
