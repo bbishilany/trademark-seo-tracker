@@ -239,6 +239,13 @@
             font-family: 'SF Mono', Monaco, monospace;
             line-height: 1.5;
         }
+        .affected-pages a {
+            color: #2563eb;
+            text-decoration: none;
+        }
+        .affected-pages a:hover {
+            text-decoration: underline;
+        }
 
         /* ── Notes / Blockers ── */
         .notes-section { margin-top: 1rem; }
@@ -880,6 +887,18 @@
         document.getElementById('progressFill').style.width = `${(done / all.length) * 100}%`;
     }
 
+    const SITE = 'https://www.trademarkfinancial.us';
+
+    function linkifyAffected(text) {
+        return text.split('\n').map(line => {
+            // Replace bare paths like /about/ or /services/ocio-services/ with full clickable links
+            return line.replace(/(^|\s)(\/[a-zA-Z0-9\-\/_.]+)/g, (match, prefix, path) => {
+                const url = SITE + path;
+                return `${prefix}<a href="${url}" target="_blank">${url}</a>`;
+            });
+        }).join('<br>');
+    }
+
     let currentFilter = 'all';
 
     function renderFixes() {
@@ -939,7 +958,7 @@
                             <h4>How to Fix</h4>
                             ${fix.fix}
                             <h4>Affected Pages</h4>
-                            <div class="affected-pages">${fix.affected.replace(/\n/g, '<br>')}</div>
+                            <div class="affected-pages">${linkifyAffected(fix.affected)}</div>
                             ${fix.receipt ? `<div class="receipt ${fix.receipt.status}">
                                 <div class="receipt-header">Verification — ${fix.receipt.date}</div>
                                 ${fix.receipt.text}
